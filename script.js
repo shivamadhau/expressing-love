@@ -1094,8 +1094,10 @@ document.addEventListener('DOMContentLoaded', function () {
     noScale = Math.max(0.5, noScale - 0.08);
     btnNo.style.transform = 'scale(' + noScale + ')';
 
-    // Dodge immediately on every click
-    dodgeButton();
+    // Start dodging only after at least 3 clicks on No
+    if (noCount >= 3) {
+      dodgeButton();
+    }
     playPop();
   }
 
@@ -1106,7 +1108,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     btnNo.addEventListener('mouseenter', function () {
-      if (btnNo.classList.contains('dodging')) {
+      if (noCount >= 3 && btnNo.classList.contains('dodging')) {
         dodgeButton();
       }
     });
