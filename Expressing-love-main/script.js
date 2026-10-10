@@ -1,8 +1,13 @@
 /* ═══════════════════════════════════════════════════
-   💖 LOVE STUDIO — Interactive Platform & Engine
+   💖 LOVE STUDIO — Interactive Platform & Supabase Engine
    ═══════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  // ─── 0. SUPABASE CONFIGURATION ───
+  const SUPABASE_URL = 'https://kkedhoeviqgdzpcwxmyq.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrZWRob2V2aXFnZHpwY3d4bXlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MzAyMTcsImV4cCI6MjEwNzIwNjIxN30.Lm10XUnfJ5P1tBze7MDhdcJTFEDzDEKkItWZ_ZNnj8o';
+  let activeNoteId = null;
 
   // ─── 1. ALL DOM REFERENCES GATHERED AT TOP ───
   // Platform Dashboard
@@ -11,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const topNav              = document.getElementById('top-nav');
   const btnNavDemo          = document.getElementById('btn-nav-demo');
   const btnNavCreate        = document.getElementById('btn-nav-create');
+  const btnNavTrack         = document.getElementById('btn-nav-track');
   const btnBackStudio       = document.getElementById('btn-back-studio');
   const btnViralCreate      = document.getElementById('btn-viral-create');
 
@@ -40,10 +46,25 @@ document.addEventListener('DOMContentLoaded', function () {
   const shareLinkInput      = document.getElementById('share-link-input');
   const btnCopyMagic        = document.getElementById('btn-copy-magic');
   const btnShareWhatsapp    = document.getElementById('btn-share-whatsapp');
+  const btnOpenTrackerFromShare = document.getElementById('btn-open-tracker-from-share');
   const qrCanvas            = document.getElementById('qr-canvas');
   const btnDownloadQr       = document.getElementById('btn-download-qr');
   const btnTestLink         = document.getElementById('btn-test-link');
   const btnCloseShare       = document.getElementById('btn-close-share');
+
+  // Tracker Modal Elements
+  const trackerModal        = document.getElementById('tracker-modal');
+  const trackerModalOverlay = document.getElementById('tracker-modal-overlay');
+  const trackerNoteIdInput  = document.getElementById('tracker-note-id-input');
+  const btnRefreshTracker   = document.getElementById('btn-refresh-tracker');
+  const btnCloseTracker     = document.getElementById('btn-close-tracker');
+  const valOpened           = document.getElementById('val-opened');
+  const subOpened           = document.getElementById('sub-opened');
+  const valYes              = document.getElementById('val-yes');
+  const subYes              = document.getElementById('sub-yes');
+  const valNoClicks         = document.getElementById('val-no-clicks');
+  const valDate             = document.getElementById('val-date');
+  const subDate             = document.getElementById('sub-date');
 
   // Partner Experience Elements
   const heartsCanvas        = document.getElementById('hearts-canvas');
@@ -100,24 +121,88 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const stages = [
     { question: 'Do you love me? 🥺',         subtitle: '~ Someone special is waiting for your answer', mascot: '(づ｡◕‿‿◕｡)づ',  plea: '' },
-    { question: 'Are you sure?? 😢',           subtitle: '~ Please reconsider...',                      mascot: '(╥﹏╥)',        plea: 'Nooo! Please think again! 🥺' },
-    { question: 'Really really sure? 😭',      subtitle: '~ My heart is breaking...',                   mascot: '(இ﹏இ)',        plea: "You're breaking my heart! 💔" },
-    { question: 'Pretty pleaseee? 🙏',         subtitle: "~ I'll be the best!",                         mascot: '(◕ᴗ◕✿)',       plea: 'I promise to make you smile every day! 🌹' },
-    { question: 'Last chance... 🥀',           subtitle: "~ Don't say no again...",                     mascot: '(╯°□°)╯︵ ┻━┻', plea: 'NOOOO! You cannot do this! 😫' },
-    { question: 'Okay fine... 😞',             subtitle: '~ But look how cute I am!',                   mascot: '(◕‿◕)',         plea: 'Look at my face. HOW CAN YOU SAY NO?! 🐱' },
-    { question: "I'm not giving up! 💪",       subtitle: "~ Because you're worth it",                   mascot: '(ง •̀_•́)ง',     plea: 'I will NEVER stop asking! 😤💖' },
-    { question: 'PLEASE SAY YES!! 😩',         subtitle: "~ I'm on my knees!",                          mascot: '🧎‍♂️',           plea: "I'm literally begging you right now 🥺🙏" },
+    { question: 'Are you sure? 🥺💔',          subtitle: '~ Think about all our late night chats...', mascot: '(╥﹏╥)',          plea: 'Please reconsider! 🥺' },
+    { question: 'Really really sure? 😢',       subtitle: '~ Who will share funny memes with you?',  mascot: '(っ- ‸ - ς)',     plea: 'My heart is breaking... 💔' },
+    { question: 'Think again, please! 😭',     subtitle: '~ I baked you imaginary cookies today 🍪', mascot: '(ಥ﹏ಥ)',          plea: 'Look at those puppy eyes! 🐶' },
+    { question: "Don't do this to me! 🥺👉👈", subtitle: '~ I promise to always let you have the last bite', mascot: '(ノ_<。)',  plea: 'Is this your final answer? 😢' },
+    { question: 'Have a heart! ❤️‍🩹',           subtitle: '~ Even Google says we belong together',    mascot: 'ʕo•̥_•̥•ʔ',         plea: 'I will write you 100 poems! 📝' },
+    { question: 'Pretty please with cherry on top? 🍒', subtitle: '~ I will make you coffee every morning', mascot: '(;´Д`)', plea: 'You are being so mean! 😭' },
+    { question: 'Last chance, my love! ⚠️',    subtitle: '~ The button is getting suspiciously hard to click', mascot: '(ง •̀_•́)ง', plea: 'Resistance is futile! 💫' },
+    { question: 'Almost no options left! 💨',  subtitle: '~ You know you love me deep down',        mascot: '(•̀o•́)ง',         plea: 'The universe is telling you YES! 🌟' },
+    { question: 'You have no other option now! 😏', subtitle: '~ Just click Yes already 💖',          mascot: '( ˘ ³˘)♥',        plea: 'The No button gave up on you too 😂💀' }
   ];
 
   let currentStage = 0;
   let noCount      = 0;
-  let audioEnabled = false;
-  let audioCtx     = null;
   let yesScale     = 1;
   let noScale      = 1;
   let isDemoMode   = false;
 
-  // ─── 3. CLEAN & SHORT URL PARSING ───
+  // ─── 3. SUPABASE HELPERS ───
+  function generateShortId() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    let res = '';
+    for (let i = 0; i < 6; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return res;
+  }
+
+  async function saveNoteToSupabase(noteObj) {
+    try {
+      const resp = await fetch(SUPABASE_URL + '/rest/v1/love_notes', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(noteObj)
+      });
+      return resp.ok;
+    } catch (err) {
+      console.warn('Supabase save failed:', err);
+      return false;
+    }
+  }
+
+  async function fetchNoteFromSupabase(id) {
+    if (!id) return null;
+    try {
+      const resp = await fetch(SUPABASE_URL + '/rest/v1/love_notes?id=eq.' + encodeURIComponent(id) + '&select=*', {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
+        }
+      });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      return (data && data.length > 0) ? data[0] : null;
+    } catch (err) {
+      console.warn('Supabase fetch failed:', err);
+      return null;
+    }
+  }
+
+  async function patchNoteResponse(id, updates) {
+    if (!id) return;
+    try {
+      await fetch(SUPABASE_URL + '/rest/v1/love_notes?id=eq.' + encodeURIComponent(id), {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updates)
+      });
+    } catch (err) {
+      console.warn('Supabase patch failed:', err);
+    }
+  }
+
+  // ─── 4. CLEAN & SHORT URL PARSING ───
   function decodePayload(str) {
     try {
       let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -167,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return null;
   }
 
-  // ─── 4. STAGE DISPLAY & STATE RESET ───
+  // ─── 5. STAGE DISPLAY & STATE RESET ───
   function showStage(target) {
     allStages.forEach(function (s) {
       if (s) s.style.display = 'none';
@@ -254,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
     stages[0].mascot = config.mascot;
   }
 
-  // ─── 5. MODE ROUTING ───
+  // ─── 6. MODE ROUTING ───
   function startPlatformMode() {
     document.body.classList.add('platform-mode');
     document.body.classList.remove('experience-mode');
@@ -283,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
     showStage(stageQuestion);
   }
 
-  // ─── 6. PLATFORM CREATOR: REACTIVE PHONE MOCKUP ───
+  // ─── 7. PLATFORM CREATOR: REACTIVE PHONE MOCKUP ───
   function updatePhoneMockup() {
     const toVal = studioTo ? (studioTo.value.trim() || 'Sweetheart') : 'Sweetheart';
     const fromVal = studioFrom ? (studioFrom.value.trim() || 'Your Secret Admirer') : 'Your Secret Admirer';
@@ -377,8 +462,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ─── 7. SHORT & CLEAN LINK GENERATOR ───
-  function generateShareUrl() {
+  // ─── 8. SHORT & SUPABASE-POWERED LINK GENERATOR ───
+  async function generateShareUrl() {
     updatePhoneMockup();
 
     let baseUrl = window.location.origin + window.location.pathname;
@@ -389,6 +474,27 @@ document.addEventListener('DOMContentLoaded', function () {
       baseUrl += 'love.html';
     }
 
+    const shortId = generateShortId();
+    const notePayload = {
+      id: shortId,
+      to_name: config.to || 'Sweetheart',
+      from_name: config.from || 'Your Secret Admirer',
+      question: config.question || 'Do you love me? 🥺',
+      mascot: config.mascot || '(づ｡◕‿‿◕｡)づ',
+      letter: config.letter || letterTemplates.romantic
+    };
+
+    // Try saving to Supabase first
+    const saved = await saveNoteToSupabase(notePayload);
+    if (saved) {
+      try {
+        localStorage.setItem('love_last_id', shortId);
+      } catch (e) {}
+      if (trackerNoteIdInput) trackerNoteIdInput.value = shortId;
+      return baseUrl + '?id=' + shortId;
+    }
+
+    // Graceful fallback to query params if Supabase unavailable
     const qParams = new URLSearchParams();
     qParams.set('to', config.to || 'Sweetheart');
     qParams.set('from', config.from || 'Your Secret Admirer');
@@ -396,12 +502,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (config.question && config.question !== 'Do you love me? 🥺') {
       qParams.set('q', config.question);
     }
-
     if (config.mascot && config.mascot !== '(づ｡◕‿‿◕｡)づ') {
       qParams.set('m', config.mascot);
     }
 
-    // Check if letter matches one of the presets
     let matchedPreset = null;
     for (const key in letterTemplates) {
       if (letterTemplates[key] === config.letter) {
@@ -419,8 +523,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return baseUrl + '?' + qParams.toString();
   }
 
-  function openShareModal() {
-    const magicUrl = generateShareUrl();
+  async function openShareModal() {
+    if (btnGenerateMagic) {
+      btnGenerateMagic.disabled = true;
+      btnGenerateMagic.innerHTML = '<span class="btn-sparkle">⏳</span><span>Creating Magic Link...</span>';
+    }
+
+    const magicUrl = await generateShareUrl();
+
+    if (btnGenerateMagic) {
+      btnGenerateMagic.disabled = false;
+      btnGenerateMagic.innerHTML = '<span class="btn-sparkle">✨</span><span>Generate Magic Link</span><span class="btn-arrow">→</span>';
+    }
+
     if (shareLinkInput) shareLinkInput.value = magicUrl;
 
     if (btnShareWhatsapp) {
@@ -477,246 +592,366 @@ document.addEventListener('DOMContentLoaded', function () {
   if (btnCloseShare) btnCloseShare.addEventListener('click', function () {
     if (shareModal) shareModal.style.display = 'none';
   });
+
   if (shareModalOverlay) shareModalOverlay.addEventListener('click', function () {
     if (shareModal) shareModal.style.display = 'none';
   });
 
-  if (btnNavCreate) {
-    btnNavCreate.addEventListener('click', function () {
-      const studioSec = document.getElementById('studio-section');
-      if (studioSec) studioSec.scrollIntoView({ behavior: 'smooth' });
+  // ─── 9. LIVE PARTNER RESPONSE TRACKER ───
+  async function loadTrackerStatus(noteId) {
+    if (!noteId) return;
+
+    if (valOpened) { valOpened.textContent = 'Checking...'; valOpened.className = 'metric-value pending'; }
+    if (valYes)    { valYes.textContent    = 'Checking...'; valYes.className    = 'metric-value pending'; }
+    if (valNoClicks) valNoClicks.textContent= '...';
+    if (valDate)   valDate.textContent     = 'Checking...';
+
+    const note = await fetchNoteFromSupabase(noteId);
+    if (!note) {
+      if (valOpened) { valOpened.textContent = 'Note not found'; valOpened.className = 'metric-value'; }
+      if (subOpened) subOpened.textContent = 'Check Note ID: ' + noteId;
+      if (valYes)    { valYes.textContent = '-'; valYes.className = 'metric-value'; }
+      return;
+    }
+
+    // 1. Opened Status
+    if (valOpened) {
+      if (note.opened) {
+        valOpened.textContent = 'Opened! 👀';
+        valOpened.className = 'metric-value success';
+        if (subOpened) {
+          if (note.opened_at) {
+            try {
+              const d = new Date(note.opened_at);
+              subOpened.textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + d.toLocaleDateString();
+            } catch (e) {
+              subOpened.textContent = 'Viewed by partner';
+            }
+          } else {
+            subOpened.textContent = 'Viewed by partner';
+          }
+        }
+      } else {
+        valOpened.textContent = 'Not opened yet';
+        valOpened.className = 'metric-value pending';
+        if (subOpened) subOpened.textContent = 'Waiting for them to tap link';
+      }
+    }
+
+    // 2. Proposal Response
+    if (valYes) {
+      if (note.said_yes) {
+        valYes.textContent = 'Said YES! 💖🎉';
+        valYes.className = 'metric-value success';
+        if (subYes) subYes.textContent = 'Accepted the proposal!';
+      } else {
+        valYes.textContent = 'Waiting for answer...';
+        valYes.className = 'metric-value pending';
+        if (subYes) subYes.textContent = 'Still deciding';
+      }
+    }
+
+    // 3. Dodged No Clicks
+    if (valNoClicks) {
+      const clicks = note.no_click_count || 0;
+      valNoClicks.textContent = clicks + (clicks === 1 ? ' time' : ' times');
+      valNoClicks.className = clicks > 0 ? 'metric-value highlight' : 'metric-value';
+    }
+
+    // 4. Date Picked
+    if (valDate) {
+      if (note.date_picked) {
+        valDate.textContent = note.date_picked + ' ✨';
+        valDate.className = 'metric-value success';
+        if (subDate) subDate.textContent = 'Stage 4 adventure chosen!';
+      } else {
+        valDate.textContent = 'Not picked yet';
+        valDate.className = 'metric-value pending';
+        if (subDate) subDate.textContent = 'Awaiting date planner';
+      }
+    }
+  }
+
+  function openTrackerModal(optionalId) {
+    let idToTrack = optionalId;
+    if (!idToTrack && trackerNoteIdInput && trackerNoteIdInput.value.trim()) {
+      idToTrack = trackerNoteIdInput.value.trim();
+    }
+    if (!idToTrack) {
+      try { idToTrack = localStorage.getItem('love_last_id'); } catch (e) {}
+    }
+    if (idToTrack && trackerNoteIdInput) {
+      trackerNoteIdInput.value = idToTrack;
+    }
+    if (trackerModal) trackerModal.style.display = 'flex';
+    if (idToTrack) {
+      loadTrackerStatus(idToTrack);
+    }
+    playPop();
+  }
+
+  if (btnNavTrack) {
+    btnNavTrack.addEventListener('click', function () { openTrackerModal(); });
+  }
+
+  if (btnOpenTrackerFromShare) {
+    btnOpenTrackerFromShare.addEventListener('click', function () {
+      let id = null;
+      try { id = localStorage.getItem('love_last_id'); } catch (e) {}
+      openTrackerModal(id);
     });
   }
 
-  if (btnNavDemo) {
-    btnNavDemo.addEventListener('click', function () {
-      updatePhoneMockup();
-      startExperienceMode(true);
+  if (btnRefreshTracker) {
+    btnRefreshTracker.addEventListener('click', function () {
+      const id = trackerNoteIdInput ? trackerNoteIdInput.value.trim() : null;
+      if (id) loadTrackerStatus(id);
+      playPop();
     });
   }
 
-  if (btnPreviewFullscreen) {
-    btnPreviewFullscreen.addEventListener('click', function () {
-      updatePhoneMockup();
-      startExperienceMode(true);
+  if (btnCloseTracker) {
+    btnCloseTracker.addEventListener('click', function () {
+      if (trackerModal) trackerModal.style.display = 'none';
     });
   }
 
-  if (btnBackStudio) {
-    btnBackStudio.addEventListener('click', function () {
-      startPlatformMode();
+  if (trackerModalOverlay) {
+    trackerModalOverlay.addEventListener('click', function () {
+      if (trackerModal) trackerModal.style.display = 'none';
     });
   }
 
-  if (btnViralCreate) {
-    btnViralCreate.addEventListener('click', function (e) {
-      e.preventDefault();
-      startPlatformMode();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
-  // ─── 8. CLIENT-SIDE QR CODE GENERATOR ───
+  // ─── 10. CLIENT-SIDE QR CODE RENDERER ───
   function drawAestheticQRCode(canvas, text) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const size = canvas.width;
     ctx.clearRect(0, 0, size, size);
 
-    ctx.fillStyle = '#ffffff';
+    // Warm gradient background
+    const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+    bgGrad.addColorStop(0, '#ffffff');
+    bgGrad.addColorStop(1, '#fff5f7');
+    ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, size, size);
 
-    const grid = 25;
-    const cellSize = (size - 24) / grid;
-    const offset = 12;
-
+    // Deterministic pseudo-random pattern based on string hash
     let hash = 0;
     for (let i = 0; i < text.length; i++) {
       hash = ((hash << 5) - hash) + text.charCodeAt(i);
       hash |= 0;
     }
 
+    const gridSize = 21;
+    const cellSize = (size - 32) / gridSize;
+    const offset = 16;
+
+    function pseudoBit(r, c) {
+      const seed = Math.sin(hash + r * 31 + c * 17) * 10000;
+      return (seed - Math.floor(seed)) > 0.46;
+    }
+
     function isFinder(r, c) {
-      if (r < 7 && c < 7) return true;
-      if (r < 7 && c >= grid - 7) return true;
-      if (r >= grid - 7 && c < 7) return true;
-      return false;
+      return (r < 7 && c < 7) || (r < 7 && c >= gridSize - 7) || (r >= gridSize - 7 && c < 7);
     }
 
-    function isCenterHeart(r, c) {
-      return r >= 10 && r <= 14 && c >= 10 && c <= 14;
-    }
+    // Gradient for cells
+    const cellGrad = ctx.createLinearGradient(0, 0, size, size);
+    cellGrad.addColorStop(0, '#ff4d84');
+    cellGrad.addColorStop(1, '#d63384');
+    ctx.fillStyle = cellGrad;
 
-    function drawFinder(sr, sc) {
-      ctx.fillStyle = '#d63384';
-      ctx.fillRect(offset + sc * cellSize, offset + sr * cellSize, 7 * cellSize, 7 * cellSize);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(offset + (sc + 1) * cellSize, offset + (sr + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-      ctx.fillStyle = '#d63384';
-      ctx.fillRect(offset + (sc + 2) * cellSize, offset + (sr + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-    }
-
-    ctx.fillStyle = '#222222';
-    for (let r = 0; r < grid; r++) {
-      for (let c = 0; c < grid; c++) {
-        if (isFinder(r, c) || isCenterHeart(r, c)) continue;
-        if (r === 6 || c === 6) {
-          if ((r + c) % 2 === 0) {
-            ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize - 0.5, cellSize - 0.5);
-          }
-          continue;
-        }
-        const bit = Math.abs(Math.sin((hash + r * 37 + c * 19) * 0.1) * 10000) % 2 > 0.9;
-        if (bit) {
-          ctx.fillStyle = ((r + c) % 5 === 0) ? '#ff3366' : '#222222';
-          ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize - 0.5, cellSize - 0.5);
+    for (let r = 0; r < gridSize; r++) {
+      for (let c = 0; c < gridSize; c++) {
+        if (!isFinder(r, c) && pseudoBit(r, c)) {
+          ctx.beginPath();
+          ctx.roundRect(offset + c * cellSize + 1, offset + r * cellSize + 1, cellSize - 2, cellSize - 2, 2);
+          ctx.fill();
         }
       }
     }
 
-    drawFinder(0, 0);
-    drawFinder(0, grid - 7);
-    drawFinder(grid - 7, 0);
+    // Draw finder patterns
+    function drawFinder(startX, startY) {
+      ctx.fillStyle = '#ff4d84';
+      ctx.fillRect(startX, startY, cellSize * 7, cellSize * 7);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(startX + cellSize, startY + cellSize, cellSize * 5, cellSize * 5);
+      ctx.fillStyle = '#d63384';
+      ctx.fillRect(startX + cellSize * 2, startY + cellSize * 2, cellSize * 3, cellSize * 3);
+    }
 
-    const centerSize = 5 * cellSize;
-    const centerPos = offset + 10 * cellSize;
+    drawFinder(offset, offset);
+    drawFinder(offset + cellSize * (gridSize - 7), offset);
+    drawFinder(offset, offset + cellSize * (gridSize - 7));
+
+    // Center cute heart badge
+    const cx = size / 2;
+    const cy = size / 2;
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(centerPos + centerSize / 2, centerPos + centerSize / 2, centerSize / 1.6, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = '22px sans-serif';
+    ctx.font = '18px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('💖', centerPos + centerSize / 2, centerPos + centerSize / 2);
+    ctx.fillText('💖', cx, cy);
   }
 
-  // ─── 9. FLOATING HEARTS BACKGROUND ───
-  const heartColors = ['#ff6b9d', '#ff3d7f', '#e91e63', '#ff9a9e', '#f8bbd0', '#ffcdd2', '#ff80ab'];
-  let hearts = [];
+  // ─── 11. AUDIO SYSTEM ───
+  let audioCtx = null;
+  let soundEnabled = true;
 
-  function resizeCanvas(canvas) {
-    if (!canvas) return;
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+  function initAudio() {
+    if (!audioCtx) {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      } catch (e) {}
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(function () {});
+    }
+  }
+
+  function playPop() {
+    if (!soundEnabled) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    } catch (e) {}
+  }
+
+  function playSuccess() {
+    if (!soundEnabled) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach(function (freq, i) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.1);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.1 + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + i * 0.1);
+        osc.stop(audioCtx.currentTime + i * 0.1 + 0.35);
+      });
+    } catch (e) {}
+  }
+
+  function playChime() {
+    if (!soundEnabled) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const chords = [587.33, 739.99, 880.00];
+      chords.forEach(function (freq, i) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.06);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime + i * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + i * 0.06 + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + i * 0.06);
+        osc.stop(audioCtx.currentTime + i * 0.06 + 0.4);
+      });
+    } catch (e) {}
+  }
+
+  if (audioToggle) {
+    audioToggle.addEventListener('click', function () {
+      soundEnabled = !soundEnabled;
+      audioToggle.textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playPop();
+    });
+  }
+
+  // ─── 12. FLOATING CANVAS HEARTS ───
+  let hearts = [];
+  function resizeCanvas(c) {
+    if (c) {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
   }
 
   function createHearts() {
+    if (!heartsCanvas) return;
+    resizeCanvas(heartsCanvas);
     hearts = [];
-    const count = Math.min(35, Math.floor(window.innerWidth / 30));
+    const count = Math.min(26, Math.floor(window.innerWidth / 45));
     for (let i = 0; i < count; i++) {
       hearts.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        size: 8 + Math.random() * 22,
-        speed: 0.3 + Math.random() * 1.0,
-        opacity: 0.08 + Math.random() * 0.35,
-        wobbleAmp: 20 + Math.random() * 40,
-        wobblePhase: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.005 + Math.random() * 0.015,
-        color: heartColors[Math.floor(Math.random() * heartColors.length)],
-        rotation: Math.random() * 0.3 - 0.15
+        x: Math.random() * heartsCanvas.width,
+        y: Math.random() * heartsCanvas.height,
+        size: 8 + Math.random() * 16,
+        speedY: 0.4 + Math.random() * 0.8,
+        speedX: (Math.random() - 0.5) * 0.4,
+        opacity: 0.2 + Math.random() * 0.45,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.02,
+        color: ['#ff4d84', '#ff85a1', '#f472b6', '#fda4af'][Math.floor(Math.random() * 4)]
       });
     }
   }
 
-  function drawHeart(ctx, cx, cy, size, color, opacity, rotation) {
+  function drawHeart(ctx, x, y, size, color, opacity, rot) {
     ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
     ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
     ctx.beginPath();
-    const s = size * 0.5;
-    ctx.moveTo(0, s * 0.4);
-    ctx.bezierCurveTo(0, -s * 0.2, -s, -s * 0.5, -s, s * 0.1);
-    ctx.bezierCurveTo(-s, s * 0.6, 0, s * 0.9, 0, s * 1.1);
-    ctx.bezierCurveTo(0, s * 0.9, s, s * 0.6, s, s * 0.1);
-    ctx.bezierCurveTo(s, -s * 0.5, 0, -s * 0.2, 0, s * 0.4);
+    const topCurveHeight = size * 0.3;
+    ctx.moveTo(0, topCurveHeight);
+    ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+    ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size * 1.15);
+    ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+    ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+    ctx.closePath();
     ctx.fill();
     ctx.restore();
   }
 
   function animateHearts() {
-    if (!heartsCtx) return;
+    if (!heartsCanvas || !heartsCtx) return;
     heartsCtx.clearRect(0, 0, heartsCanvas.width, heartsCanvas.height);
-
     for (const h of hearts) {
-      h.y -= h.speed;
-      h.wobblePhase += h.wobbleSpeed;
-      const wx = h.x + Math.sin(h.wobblePhase) * h.wobbleAmp;
-
-      if (h.y + h.size < 0) {
-        h.y = window.innerHeight + h.size;
-        h.x = Math.random() * window.innerWidth;
+      h.y -= h.speedY;
+      h.x += h.speedX;
+      h.rotation += h.rotSpeed;
+      if (h.y < -30) {
+        h.y = heartsCanvas.height + 20;
+        h.x = Math.random() * heartsCanvas.width;
       }
-
-      drawHeart(heartsCtx, wx, h.y, h.size, h.color, h.opacity, h.rotation);
+      drawHeart(heartsCtx, h.x, h.y, h.size, h.color, h.opacity, h.rotation);
     }
-
     requestAnimationFrame(animateHearts);
   }
 
-  resizeCanvas(heartsCanvas);
   createHearts();
   animateHearts();
 
-  // ─── 10. WEB AUDIO SYSTEM ───
-  function ensureAudioCtx() {
-    try {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    } catch (e) {}
-  }
-
-  function playTone(freq, duration, type, vol, ramp) {
-    if (!audioEnabled) return;
-    try {
-      ensureAudioCtx();
-      if (!audioCtx) return;
-      const osc  = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type || 'sine';
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      if (ramp) osc.frequency.linearRampToValueAtTime(ramp, audioCtx.currentTime + duration);
-      gain.gain.setValueAtTime(vol || 0.12, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
-    } catch (e) {}
-  }
-
-  function playPop() {
-    playTone(600, 0.08, 'sine', 0.15, 200);
-  }
-
-  function playChime() {
-    playTone(880, 0.18, 'sine', 0.1);
-    setTimeout(function () { playTone(1320, 0.18, 'sine', 0.08); }, 60);
-  }
-
-  function playSuccess() {
-    playTone(523, 0.15, 'sine', 0.12);
-    setTimeout(function () { playTone(659, 0.15, 'sine', 0.12); }, 140);
-    setTimeout(function () { playTone(784, 0.22, 'sine', 0.14); }, 280);
-    setTimeout(function () { playTone(1047, 0.35, 'sine', 0.1); }, 420);
-  }
-
-  if (audioToggle) {
-    audioToggle.addEventListener('click', function () {
-      audioEnabled = !audioEnabled;
-      audioToggle.textContent = audioEnabled ? '🔊' : '🔇';
-      if (audioEnabled) {
-        ensureAudioCtx();
-        playChime();
-      }
-    });
-  }
-
-  // ─── 11. BUTTON ACTIONS: RESPONSIVE YES & DODGING NO ───
+  // ─── 13. BUTTON ACTIONS: RESPONSIVE YES & DODGING NO ───
   function dodgeButton() {
     if (!btnNo || !buttonsContainer) return;
     const containerRect = buttonsContainer.getBoundingClientRect();
@@ -732,6 +967,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleNoAction() {
     noCount++;
     currentStage++;
+
+    // Track "No" click count in Supabase
+    if (activeNoteId) {
+      patchNoteResponse(activeNoteId, { no_click_count: noCount });
+    }
 
     // 10th No: Vanish permanently!
     if (noCount >= 10) {
@@ -816,10 +1056,18 @@ document.addEventListener('DOMContentLoaded', function () {
       playSuccess();
       showStage(stageCelebrate);
       launchConfetti();
+
+      // Track "Said Yes" in Supabase
+      if (activeNoteId) {
+        patchNoteResponse(activeNoteId, {
+          said_yes: true,
+          answered_at: new Date().toISOString()
+        });
+      }
     });
   }
 
-  // ─── 12. CONFETTI & FIREWORKS ───
+  // ─── 14. CONFETTI & FIREWORKS ───
   let confettiParticles = [];
   function launchConfetti() {
     if (!confettiCanvas || !confettiCtx) return;
@@ -886,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     animConfetti();
   }
 
-  // ─── 13. FLOATING ENVELOPE & LETTER ───
+  // ─── 15. FLOATING ENVELOPE & LETTER ───
   if (btnNext) {
     btnNext.addEventListener('click', function () {
       playChime();
@@ -949,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ─── 14. DATE PLANNER & RESTART ───
+  // ─── 16. DATE PLANNER & RESTART ───
   if (btnDate) {
     btnDate.addEventListener('click', function () {
       playChime();
@@ -974,6 +1222,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (btnRestart) btnRestart.style.display = 'inline-block';
+
+        // Track chosen date in Supabase
+        if (activeNoteId) {
+          patchNoteResponse(activeNoteId, { date_picked: dateText });
+        }
       });
     });
   }
@@ -986,24 +1239,71 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ─── 15. WINDOW RESIZE ───
+  // Demo mode buttons
+  if (btnNavDemo) {
+    btnNavDemo.addEventListener('click', function () {
+      startExperienceMode(true);
+    });
+  }
+
+  if (btnPreviewFullscreen) {
+    btnPreviewFullscreen.addEventListener('click', function () {
+      startExperienceMode(true);
+    });
+  }
+
+  if (btnBackStudio) {
+    btnBackStudio.addEventListener('click', function () {
+      startPlatformMode();
+    });
+  }
+
+  // ─── 17. WINDOW RESIZE ───
   window.addEventListener('resize', function () {
     resizeCanvas(heartsCanvas);
     resizeCanvas(confettiCanvas);
     createHearts();
   });
 
-  // ─── 16. RUN INITIAL ROUTE ───
-  const isLovePage = window.location.pathname.endsWith('love.html');
-  const partnerData = getUrlParams();
+  // ─── 18. RUN INITIAL ROUTE (ASYNC SUPABASE SUPPORT) ───
+  async function initRoute() {
+    const isLovePage = window.location.pathname.endsWith('love.html');
+    const urlParams = new URLSearchParams(window.location.search);
+    const noteIdParam = urlParams.get('id');
 
-  if (isLovePage || partnerData) {
-    if (partnerData) {
-      config = Object.assign({}, config, partnerData);
+    if (noteIdParam) {
+      activeNoteId = noteIdParam;
+      // Fetch note from Supabase
+      const remoteNote = await fetchNoteFromSupabase(noteIdParam);
+      if (remoteNote) {
+        config = {
+          to: remoteNote.to_name || 'Sweetheart',
+          from: remoteNote.from_name || 'Your Secret Admirer',
+          question: remoteNote.question || 'Do you love me? 🥺',
+          mascot: remoteNote.mascot || '(づ｡◕‿‿◕｡)づ',
+          letter: remoteNote.letter || letterTemplates.romantic
+        };
+        // Record that the note was opened by the partner
+        patchNoteResponse(activeNoteId, {
+          opened: true,
+          opened_at: new Date().toISOString()
+        });
+      }
+      startExperienceMode(false);
+      return;
     }
-    startExperienceMode(false);
-  } else {
-    startPlatformMode();
+
+    const partnerData = getUrlParams();
+    if (isLovePage || partnerData) {
+      if (partnerData) {
+        config = Object.assign({}, config, partnerData);
+      }
+      startExperienceMode(false);
+    } else {
+      startPlatformMode();
+    }
   }
+
+  initRoute();
 
 });
