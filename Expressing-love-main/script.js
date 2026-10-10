@@ -201,6 +201,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // ─── 3.5. 48-HOUR TTL STORAGE PURGE ───
+  async function cleanupExpiredNotes() {
+    try {
+      const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+      await fetch(SUPABASE_URL + '/rest/v1/love_notes?created_at=lt.' + encodeURIComponent(cutoff), {
+        method: 'DELETE',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
+        }
+      });
+    } catch (e) {}
+  }
+
   // ─── 4. CLEAN & SHORT URL PARSING ───
   function decodePayload(str) {
     try {
@@ -529,6 +543,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   async function openShareModal() {
+    cleanupExpiredNotes();
+
     if (btnGenerateMagic) {
       btnGenerateMagic.disabled = true;
       btnGenerateMagic.innerHTML = '<span class="btn-sparkle">⏳</span><span>Creating Magic Link...</span>';
@@ -1323,6 +1339,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (noteIdParam) {
       activeNoteId = noteIdParam;
+      cleanupExpiredNotes();
+
       // Fetch note from Supabase
       const remoteNote = await fetchNoteFromSupabase(noteIdParam);
       if (remoteNote) {
@@ -1338,8 +1356,27 @@ document.addEventListener('DOMContentLoaded', function () {
           opened: true,
           opened_at: new Date().toISOString()
         });
+        startExperienceMode(false);
+      } else {
+        // Expired or deleted after 48-hour TTL
+        startExperienceMode(false);
+        if (mascot) mascot.textContent = '⌛';
+        if (questionText) questionText.textContent = 'This Love Note Has Expired';
+        if (subtitleText) subtitleText.textContent = '~ Love notes expire after 48 hours for privacy & storage';
+        if (pleaMessage) {
+          pleaMessage.textContent = 'This note is no longer stored. You can create your own special note! 💕';
+          pleaMessage.classList.remove('shake');
+        }
+        if (btnNo) btnNo.style.display = 'none';
+        if (btnYes) {
+          btnYes.textContent = '✨ Create Your Own Note';
+          btnYes.style.transform = 'scale(1)';
+          btnYes.onclick = function (e) {
+            e.stopPropagation();
+            window.location.href = './index.html';
+          };
+        }
       }
-      startExperienceMode(false);
       return;
     }
 
