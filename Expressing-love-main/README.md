@@ -8,9 +8,9 @@ Made with ❤️ by **Somu & Nanu**.
 
 ## 🚀 Live Links
 
-- **Love Studio Platform (Creator Dashboard)**: [https://white-labs.github.io/expressing-love/](https://white-labs.github.io/expressing-love/)
-- **GitHub Repository**: [https://github.com/white-labs/expressing-love](https://github.com/white-labs/expressing-love)
-- **1-Click Vercel Deploy**: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/white-labs/expressing-love)
+- **Love Studio Platform (Creator Dashboard)**: [https://white-labs.github.io/lovestudio/](https://white-labs.github.io/lovestudio/)
+- **GitHub Repository**: [https://github.com/white-labs/lovestudio](https://github.com/white-labs/lovestudio)
+- **1-Click Vercel Deploy**: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/white-labs/lovestudio)
 
 ---
 
