@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Partner Experience Elements
   const heartsCanvas        = document.getElementById('hearts-canvas');
   const heartsCtx           = heartsCanvas ? heartsCanvas.getContext('2d') : null;
-  const audioToggle         = document.getElementById('audio-toggle');
 
   const stageQuestion       = document.getElementById('stage-question');
   const stageCelebrate      = document.getElementById('stage-celebrate');
@@ -877,13 +876,19 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (e) {}
   }
 
-  if (audioToggle) {
-    audioToggle.addEventListener('click', function () {
-      soundEnabled = !soundEnabled;
-      audioToggle.textContent = soundEnabled ? '🔊' : '🔇';
-      if (soundEnabled) playPop();
+  // Auto-unlock Web Audio on first user interaction so sounds play by default
+  function setupAudioUnlock() {
+    function unlock() {
+      initAudio();
+      ['click', 'touchstart', 'pointerdown'].forEach(function (evt) {
+        document.removeEventListener(evt, unlock);
+      });
+    }
+    ['click', 'touchstart', 'pointerdown'].forEach(function (evt) {
+      document.addEventListener(evt, unlock, { once: true, passive: true });
     });
   }
+  setupAudioUnlock();
 
   // ─── 12. FLOATING CANVAS HEARTS ───
   let hearts = [];
@@ -956,10 +961,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!btnNo || !buttonsContainer) return;
     const containerRect = buttonsContainer.getBoundingClientRect();
     const btnRect = btnNo.getBoundingClientRect();
-    const maxX = containerRect.width - btnRect.width - 10;
-    const maxY = containerRect.height - btnRect.height - 10;
-    const newX = Math.max(5, Math.random() * Math.max(maxX, 150));
-    const newY = Math.max(5, Math.random() * Math.max(maxY, 50));
+    const maxW = Math.max(10, containerRect.width - btnRect.width - 6);
+    const maxH = Math.max(10, containerRect.height - btnRect.height - 6);
+    const newX = Math.max(4, Math.min(maxW, Math.random() * maxW));
+    const newY = Math.max(4, Math.min(maxH, Math.random() * maxH));
     btnNo.style.left = newX + 'px';
     btnNo.style.top  = newY + 'px';
   }
