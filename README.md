@@ -1,4 +1,4 @@
-﻿# 💖 Love Studio — The Interactive Romantic Proposal Platform
+# 💖 Love Studio — The Interactive Romantic Proposal Platform
 
 A modern, viral web platform where anyone can create a personalized, impossible-to-say-no interactive proposal link for their partner in 30 seconds.
 
@@ -8,9 +8,9 @@ Made with ❤️ by **Somu & Nanu**.
 
 ## 🚀 Live Links
 
-- **Love Studio Platform (Creator Dashboard)**: [https://shivamadhau.github.io/expressing-love/](https://shivamadhau.github.io/expressing-love/)
-- **GitHub Repository**: [https://github.com/shivamadhau/expressing-love](https://github.com/shivamadhau/expressing-love)
-- **1-Click Vercel Deploy**: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/shivamadhau/expressing-love)
+- **Love Studio Platform (Creator Dashboard)**: [https://white-labs.github.io/expressing-love/](https://white-labs.github.io/expressing-love/)
+- **GitHub Repository**: [https://github.com/white-labs/expressing-love](https://github.com/white-labs/expressing-love)
+- **1-Click Vercel Deploy**: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/white-labs/expressing-love)
 
 ---
 
