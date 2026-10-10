@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnNavCreate        = document.getElementById('btn-nav-create');
   const btnNavTrack         = document.getElementById('btn-nav-track');
   const btnBackStudio       = document.getElementById('btn-back-studio');
-  const btnViralCreate      = document.getElementById('btn-viral-create');
+  const dateFinalActions    = document.getElementById('date-final-actions');
+  const btnCreateNoteFinal  = document.getElementById('btn-create-note-final');
 
   // Creator Form Controls
   const studioTo            = document.getElementById('studio-to');
@@ -343,6 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (dateResult) dateResult.style.display = 'none';
     if (btnRestart) btnRestart.style.display = 'none';
+    if (dateFinalActions) dateFinalActions.style.display = 'none';
   }
 
   function applyConfigToExperience() {
@@ -1289,13 +1291,30 @@ document.addEventListener('DOMContentLoaded', function () {
           dateResult.style.animation = 'fadeInUp 0.6s ease';
         }
 
-        if (btnRestart) btnRestart.style.display = 'inline-block';
+        if (dateFinalActions) {
+          dateFinalActions.style.display = 'flex';
+          dateFinalActions.style.animation = 'none';
+          void dateFinalActions.offsetWidth;
+          dateFinalActions.style.animation = 'fadeInUp 0.6s ease';
+        }
 
         // Track chosen date in Supabase
         if (activeNoteId) {
           patchNoteResponse(activeNoteId, { date_picked: dateText });
         }
       });
+    });
+  }
+
+  if (btnCreateNoteFinal) {
+    btnCreateNoteFinal.addEventListener('click', function (e) {
+      playPop();
+      if (window.location.pathname.endsWith('love.html')) {
+        window.location.href = './index.html';
+      } else {
+        e.preventDefault();
+        startPlatformMode();
+      }
     });
   }
 
