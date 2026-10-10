@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖 A Special Message For You 💖</title>
+    <meta name="theme-color" content="#ff6b9d">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="experience-mode">
+    <canvas id="hearts-canvas" aria-label="Floating hearts background"></canvas>
+    
+    <button id="audio-toggle" aria-label="Toggle audio">🔇</button>
+
+    <!-- Experience Container -->
+    <div id="experience-container" class="experience-container">
+        <!-- Stage 1: The Question -->
+        <div id="stage-question" class="stage active">
+            <div class="glass-card">
+                <div id="mascot" aria-label="Cute mascot">(づ｡◕‿‿◕｡)づ</div>
+                <h1 id="question-text">Do you love me? 🥺</h1>
+                <p id="subtitle-text">~ Someone special is waiting for your answer</p>
+                <p id="plea-message"></p>
+                <div class="buttons-container" id="buttons-container">
+                    <button id="btn-yes" class="btn btn-yes">Yes 💖</button>
+                    <button id="btn-no" class="btn btn-no">No 😤</button>
+                </div>
+                <p id="no-counter" class="no-counter"></p>
+            </div>
+        </div>
+
+        <!-- Stage 2: Celebration -->
+        <div id="stage-celebrate" class="stage" style="display:none;">
+            <canvas id="confetti-canvas" aria-label="Confetti animation"></canvas>
+            <div class="glass-card celebrate-card">
+                <div class="celebrate-mascot">٩(♡ε♡)۶</div>
+                <h1>Yaaaay! I knew it! 🎉💖</h1>
+                <p>You just made someone the happiest person alive!</p>
+                <div class="big-heart">❤️</div>
+                <button id="btn-next" class="btn btn-love">Open your love letter 💌</button>
+            </div>
+        </div>
+
+        <!-- Stage 3: Love Letter -->
+        <div id="stage-letter" class="stage" style="display:none;">
+            <div class="glass-card letter-card">
+                <h1 class="letter-title">A Letter For You 💌</h1>
+
+                <!-- Floating Sealed Envelope -->
+                <div class="envelope-area" id="envelope-area">
+                    <div class="envelope" id="envelope">
+                        <div class="envelope-back"></div>
+                        <div class="envelope-pocket"></div>
+                        <div class="envelope-flap" id="envelope-flap">
+                            <div class="envelope-seal" id="envelope-seal">💖</div>
+                        </div>
+                    </div>
+                    <div class="envelope-shadow" id="envelope-shadow"></div>
+                </div>
+
+                <!-- The Letter -->
+                <div class="letter" id="letter" style="display:none;">
+                    <div class="letter-stamp">💌</div>
+                    <h2>My Dearest <span id="letter-to"></span>,</h2>
+                    <p class="letter-content" id="letter-content">
+                        From the moment you came into my life, everything changed for the better.
+                        Every smile of yours lights up my entire world, and every moment we share 
+                        becomes my most treasured memory. I don't need the stars when I have the 
+                        sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕
+                    </p>
+                    <p class="letter-sign">Forever yours,<br><span id="letter-from"></span></p>
+                    <div class="letter-hearts">💗 💖 💕 💞 💓</div>
+                </div>
+
+                <p class="envelope-hint" id="envelope-hint">✨ Click the envelope to open ✨</p>
+                <button id="btn-date" class="btn btn-love" style="display:none; margin-top: 20px;">Plan our next date? 🌹</button>
+            </div>
+        </div>
+
+        <!-- Stage 4: Date Planner -->
+        <div id="stage-date" class="stage" style="display:none;">
+            <div class="glass-card">
+                <h1>Pick our next adventure! 🗺️</h1>
+                <p class="date-subtitle">Choose something special for us ✨</p>
+                <div class="date-grid">
+                    <div class="date-card" data-date="Stargazing Night">
+                        <span class="date-emoji">🌃</span>
+                        <span class="date-label">Stargazing Night</span>
+                    </div>
+                    <div class="date-card" data-date="Candlelight Dinner">
+                        <span class="date-emoji">🍽️</span>
+                        <span class="date-label">Candlelight Dinner</span>
+                    </div>
+                    <div class="date-card" data-date="Movie Marathon">
+                        <span class="date-emoji">🎬</span>
+                        <span class="date-label">Movie Marathon</span>
+                    </div>
+                    <div class="date-card" data-date="Beach Sunset Walk">
+                        <span class="date-emoji">🏖️</span>
+                        <span class="date-label">Beach Sunset Walk</span>
+                    </div>
+                    <div class="date-card" data-date="Amusement Park Fun">
+                        <span class="date-emoji">🎡</span>
+                        <span class="date-label">Amusement Park</span>
+                    </div>
+                    <div class="date-card" data-date="Mountain Adventure">
+                        <span class="date-emoji">🏔️</span>
+                        <span class="date-label">Mountain Adventure</span>
+                    </div>
+                </div>
+                <div id="date-result" class="date-result" style="display:none;"></div>
+                <button id="btn-restart" class="btn btn-love" style="display:none; margin-top: 20px;">Start Over 🔄</button>
+            </div>
+        </div>
+
+        <!-- Viral Call to Action Button for Partner -->
+        <a href="./index.html" class="viral-create-btn" aria-label="Make your own love note">
+            ✨ Make your own love note
+        </a>
+
+        <!-- Credit Footer -->
+        <footer class="credit-footer">
+            Made with <span class="credit-heart">❤️</span> by Somu & Nanu
+        </footer>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

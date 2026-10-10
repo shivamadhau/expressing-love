@@ -1,62 +1,105 @@
 /* ═══════════════════════════════════════════════════
-   💖 Expressing Love — Interactive Engine
+   💖 LOVE STUDIO — Interactive Platform & Engine
    ═══════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // ─── DOM References ───
-  const heartsCanvas   = document.getElementById('hearts-canvas');
-  const heartsCtx      = heartsCanvas ? heartsCanvas.getContext('2d') : null;
-  const audioToggle    = document.getElementById('audio-toggle');
+  // ─── DOM References: Platform Dashboard ───
+  const platformDashboard  = document.getElementById('platform-dashboard');
+  const experienceContainer= document.getElementById('experience-container');
+  const topNav              = document.getElementById('top-nav');
+  const btnNavDemo          = document.getElementById('btn-nav-demo');
+  const btnNavCreate        = document.getElementById('btn-nav-create');
+  const btnBackStudio       = document.getElementById('btn-back-studio');
+  const btnViralCreate      = document.getElementById('btn-viral-create');
 
-  const stageQuestion  = document.getElementById('stage-question');
-  const stageCelebrate = document.getElementById('stage-celebrate');
-  const stageLetter    = document.getElementById('stage-letter');
-  const stageDate      = document.getElementById('stage-date');
+  // Creator Form Controls
+  const studioTo            = document.getElementById('studio-to');
+  const studioFrom          = document.getElementById('studio-from');
+  const studioQuestion      = document.getElementById('studio-question');
+  const studioLetter        = document.getElementById('studio-letter');
+  const questionPresets     = document.getElementById('question-presets');
+  const mascotPresets       = document.getElementById('mascot-presets');
+  const letterPresets       = document.getElementById('letter-presets');
+  const btnGenerateMagic    = document.getElementById('btn-generate-magic');
+  const btnPreviewFullscreen= document.getElementById('btn-preview-fullscreen');
 
-  const mascot         = document.getElementById('mascot');
-  const questionText   = document.getElementById('question-text');
-  const subtitleText   = document.getElementById('subtitle-text');
-  const pleaMessage    = document.getElementById('plea-message');
-  const btnYes         = document.getElementById('btn-yes');
-  const btnNo          = document.getElementById('btn-no');
-  const noCounter      = document.getElementById('no-counter');
-  const buttonsContainer = document.getElementById('buttons-container');
+  // Phone Mockup Elements
+  const mockupMascot        = document.getElementById('mockup-mascot');
+  const mockupQuestion      = document.getElementById('mockup-question');
+  const mockupSubtitle      = document.getElementById('mockup-subtitle');
 
-  const confettiCanvas = document.getElementById('confetti-canvas');
-  const confettiCtx    = confettiCanvas ? confettiCanvas.getContext('2d') : null;
-  const btnNext        = document.getElementById('btn-next');
+  // Share Modal Elements
+  const shareModal          = document.getElementById('share-modal');
+  const shareModalOverlay   = document.getElementById('share-modal-overlay');
+  const shareLinkInput      = document.getElementById('share-link-input');
+  const btnCopyMagic        = document.getElementById('btn-copy-magic');
+  const btnShareWhatsapp    = document.getElementById('btn-share-whatsapp');
+  const qrCanvas            = document.getElementById('qr-canvas');
+  const btnDownloadQr       = document.getElementById('btn-download-qr');
+  const btnTestLink         = document.getElementById('btn-test-link');
+  const btnCloseShare       = document.getElementById('btn-close-share');
 
-  const envelope       = document.getElementById('envelope');
-  const letterTo       = document.getElementById('letter-to');
-  const letterFrom     = document.getElementById('letter-from');
-  const btnDate        = document.getElementById('btn-date');
-  const envelopeHint   = document.getElementById('envelope-hint');
+  // ─── DOM References: Partner Experience ───
+  const heartsCanvas        = document.getElementById('hearts-canvas');
+  const heartsCtx           = heartsCanvas ? heartsCanvas.getContext('2d') : null;
+  const audioToggle         = document.getElementById('audio-toggle');
 
-  const dateResult     = document.getElementById('date-result');
-  const btnRestart     = document.getElementById('btn-restart');
+  const stageQuestion       = document.getElementById('stage-question');
+  const stageCelebrate      = document.getElementById('stage-celebrate');
+  const stageLetter         = document.getElementById('stage-letter');
+  const stageDate           = document.getElementById('stage-date');
 
-  const customizerModal = document.getElementById('customizer-modal');
-  const modalOverlay    = document.getElementById('modal-overlay');
-  const inputTo         = document.getElementById('input-to');
-  const inputFrom       = document.getElementById('input-from');
-  const btnGenerate     = document.getElementById('btn-generate');
-  const linkResult      = document.getElementById('link-result');
-  const generatedLink   = document.getElementById('generated-link');
-  const btnCopy         = document.getElementById('btn-copy');
-  const btnCloseModal   = document.getElementById('btn-close-modal');
-  const btnCustomize    = document.getElementById('btn-customize');
+  const mascot              = document.getElementById('mascot');
+  const questionText        = document.getElementById('question-text');
+  const subtitleText        = document.getElementById('subtitle-text');
+  const pleaMessage         = document.getElementById('plea-message');
+  const btnYes              = document.getElementById('btn-yes');
+  const btnNo               = document.getElementById('btn-no');
+  const noCounter           = document.getElementById('no-counter');
+  const buttonsContainer    = document.getElementById('buttons-container');
 
-  // ─── State ───
+  const confettiCanvas      = document.getElementById('confetti-canvas');
+  const confettiCtx         = confettiCanvas ? confettiCanvas.getContext('2d') : null;
+  const btnNext             = document.getElementById('btn-next');
+
+  const envelope            = document.getElementById('envelope');
+  const envelopeArea        = document.getElementById('envelope-area');
+  const letterEl            = document.getElementById('letter');
+  const letterTo            = document.getElementById('letter-to');
+  const letterFrom          = document.getElementById('letter-from');
+  const letterContent       = document.getElementById('letter-content');
+  const btnDate             = document.getElementById('btn-date');
+  const envelopeHint        = document.getElementById('envelope-hint');
+
+  const dateResult          = document.getElementById('date-result');
+  const btnRestart          = document.getElementById('btn-restart');
+
+  // ─── State & Default Configuration ───
+  const letterTemplates = {
+    romantic: "From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don\'t need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕",
+    playful: "You are officially my favorite human, my emergency contact for late-night food cravings, and the only person I will gladly share my dessert with. Life with you is my favorite comedy show. Love you endlessly, you adorable weirdo! 😜💖",
+    poetic: "In a world spinning with infinite chaos, you are my serene silence. You are the poetry I never knew how to write, the sunlit morning after endless rain, and the home my soul was always searching for. Forever and always. 🌌✨",
+    short: "Just a sweet little reminder that you mean the entire universe to me. Thank you for being you, and for making my heart skip a beat every single day. I love you so much! 🌸💕"
+  };
+
+  let config = {
+    to: 'Sweetheart',
+    from: 'Your Secret Admirer',
+    question: 'Do you love me? 🥺',
+    mascot: '(づ｡◕‿‿◕｡)づ',
+    letter: letterTemplates.romantic
+  };
+
   const stages = [
     { question: 'Do you love me? 🥺',         subtitle: '~ Someone special is waiting for your answer', mascot: '(づ｡◕‿‿◕｡)づ',  plea: '' },
     { question: 'Are you sure?? 😢',           subtitle: '~ Please reconsider...',                      mascot: '(╥﹏╥)',        plea: 'Nooo! Please think again! 🥺' },
-    { question: 'Really really sure? 😭',      subtitle: '~ My heart is breaking...',                   mascot: '(இ﹏இ)',        plea: "You're breaking my heart! 💔" },
-    { question: 'Pretty pleaseee? 🙏',         subtitle: "~ I'll be the best!",                         mascot: '(◕ᴗ◕✿)',       plea: 'I promise to make you smile every day! 🌹' },
-    { question: 'Last chance... 🥀',           subtitle: "~ Don't say no again...",                     mascot: '(╯°□°)╯︵ ┻━┻', plea: 'NOOOO! You cannot do this! 😫' },
+    { question: 'Really really sure? 😭',      subtitle: '~ My heart is breaking...',                   mascot: '(இ﹏இ)',        plea: "You\'re breaking my heart! 💔" },
+    { question: 'Pretty pleaseee? 🙏',         subtitle: "~ I\'ll be the best!",                         mascot: '(◕ᴗ◕✿)',       plea: 'I promise to make you smile every day! 🌹' },
+    { question: 'Last chance... 🥀',           subtitle: "~ Don\'t say no again...",                     mascot: '(╯°□°)╯︵ ┻━┻', plea: 'NOOOO! You cannot do this! 😫' },
     { question: 'Okay fine... 😞',             subtitle: '~ But look how cute I am!',                   mascot: '(◕‿◕)',         plea: 'Look at my face. HOW CAN YOU SAY NO?! 🐱' },
-    { question: "I'm not giving up! 💪",       subtitle: "~ Because you're worth it",                   mascot: '(ง •̀_•́)ง',     plea: 'I will NEVER stop asking! 😤💖' },
-    { question: 'PLEASE SAY YES!! 😩',         subtitle: "~ I'm on my knees!",                          mascot: '🧎‍♂️',           plea: "I'm literally begging you right now 🥺🙏" },
+    { question: "I\'m not giving up! 💪",       subtitle: "~ Because you\'re worth it",                   mascot: '(ง •̀_•́)ง',     plea: 'I will NEVER stop asking! 😤💖' },
+    { question: 'PLEASE SAY YES!! 😩',         subtitle: "~ I\'m on my knees!",                          mascot: '🧎‍♂️',           plea: "I\'m literally begging you right now 🥺🙏" },
   ];
 
   let currentStage = 0;
@@ -65,14 +108,398 @@ document.addEventListener('DOMContentLoaded', function () {
   let audioCtx     = null;
   let yesScale     = 1;
   let noScale      = 1;
-
-  // ─── URL Personalization ───
-  const urlParams  = new URLSearchParams(window.location.search);
-  const personTo   = urlParams.get('to') || '';
-  const personFrom = urlParams.get('from') || '';
+  let isDemoMode   = false;
 
   // ════════════════════════════════════════
-  // 1. FLOATING HEARTS BACKGROUND
+  // 1. DATA ENCODING & URL PARSING
+  // ════════════════════════════════════════
+
+  function encodePayload(obj) {
+    try {
+      const json = JSON.stringify(obj);
+      return btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+        return String.fromCharCode('0x' + p1);
+      })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function decodePayload(str) {
+    try {
+      let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      const json = decodeURIComponent(Array.prototype.map.call(atob(b64), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(json);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const dParam = params.get('d');
+    if (dParam) {
+      const decoded = decodePayload(dParam);
+      if (decoded) return decoded;
+    }
+    const to = params.get('to');
+    const from = params.get('from');
+    const q = params.get('q');
+    const mascot = params.get('m');
+    const msg = params.get('msg');
+    if (to || from || q || msg) {
+      return {
+        to: to || 'Sweetheart',
+        from: from || 'Your Secret Admirer',
+        question: q || 'Do you love me? 🥺',
+        mascot: mascot || '(づ｡◕‿‿◕｡)づ',
+        letter: msg || letterTemplates.romantic
+      };
+    }
+    return null;
+  }
+
+  // ════════════════════════════════════════
+  // 2. MODE DETERMINATION & ROUTING
+  // ════════════════════════════════════════
+  const isLovePage = window.location.pathname.endsWith('love.html');
+  const partnerData = getUrlParams();
+
+  if (isLovePage || partnerData) {
+    if (partnerData) {
+      config = Object.assign({}, config, partnerData);
+    }
+    startExperienceMode(false);
+  } else {
+    startPlatformMode();
+  }
+
+  function startPlatformMode() {
+    document.body.classList.add('platform-mode');
+    document.body.classList.remove('experience-mode');
+    if (platformDashboard) platformDashboard.style.display = 'block';
+    if (experienceContainer) experienceContainer.style.display = 'none';
+    if (topNav) topNav.style.display = 'flex';
+    if (btnBackStudio) btnBackStudio.style.display = 'none';
+
+    updatePhoneMockup();
+  }
+
+  function startExperienceMode(fromDemo) {
+    isDemoMode = fromDemo;
+    document.body.classList.add('experience-mode');
+    document.body.classList.remove('platform-mode');
+    if (platformDashboard) platformDashboard.style.display = 'none';
+    if (experienceContainer) experienceContainer.style.display = 'block';
+    if (topNav) topNav.style.display = 'none';
+
+    if (btnBackStudio) {
+      btnBackStudio.style.display = fromDemo ? 'block' : 'none';
+    }
+
+    applyConfigToExperience();
+    resetExperienceState();
+    showStage(stageQuestion);
+  }
+
+  function applyConfigToExperience() {
+    if (questionText) questionText.textContent = config.question;
+    if (subtitleText) subtitleText.textContent = '~ ' + config.from + ' is waiting for your answer';
+    if (mascot) mascot.textContent = config.mascot;
+    if (letterTo) letterTo.textContent = config.to;
+    if (letterFrom) letterFrom.textContent = config.from;
+    if (letterContent) letterContent.textContent = config.letter;
+
+    stages[0].question = config.question;
+    stages[0].subtitle = '~ ' + config.from + ' is waiting for your answer';
+    stages[0].mascot = config.mascot;
+  }
+
+  // ════════════════════════════════════════
+  // 3. PLATFORM STUDIO: REACTIVE MOCKUP
+  // ════════════════════════════════════════
+  function updatePhoneMockup() {
+    const toVal = studioTo ? (studioTo.value.trim() || 'Sweetheart') : 'Sweetheart';
+    const fromVal = studioFrom ? (studioFrom.value.trim() || 'Your Secret Admirer') : 'Your Secret Admirer';
+    const qVal = studioQuestion ? (studioQuestion.value.trim() || 'Do you love me? 🥺') : 'Do you love me? 🥺';
+    
+    const activeMascotBtn = document.querySelector('.mascot-chip.active');
+    const mascotVal = activeMascotBtn ? activeMascotBtn.getAttribute('data-mascot') : '(づ｡◕‿‿◕｡)づ';
+
+    if (mockupMascot) mockupMascot.textContent = mascotVal;
+    if (mockupQuestion) mockupQuestion.textContent = qVal;
+    if (mockupSubtitle) mockupSubtitle.textContent = '~ ' + fromVal + ' is waiting for your answer';
+
+    config.to = toVal;
+    config.from = fromVal;
+    config.question = qVal;
+    config.mascot = mascotVal;
+    if (studioLetter) config.letter = studioLetter.value.trim() || letterTemplates.romantic;
+  }
+
+  if (studioTo) studioTo.addEventListener('input', updatePhoneMockup);
+  if (studioFrom) studioFrom.addEventListener('input', updatePhoneMockup);
+  if (studioQuestion) studioQuestion.addEventListener('input', updatePhoneMockup);
+  if (studioLetter) studioLetter.addEventListener('input', updatePhoneMockup);
+
+  if (questionPresets) {
+    questionPresets.querySelectorAll('.preset-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        questionPresets.querySelectorAll('.preset-chip').forEach(function (c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        const qAttr = btn.getAttribute('data-q');
+        if (qAttr === 'custom') {
+          if (studioQuestion) {
+            studioQuestion.focus();
+            studioQuestion.select();
+          }
+        } else {
+          if (studioQuestion) studioQuestion.value = qAttr;
+        }
+        updatePhoneMockup();
+      });
+    });
+  }
+
+  if (mascotPresets) {
+    mascotPresets.querySelectorAll('.mascot-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        mascotPresets.querySelectorAll('.mascot-chip').forEach(function (c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        updatePhoneMockup();
+      });
+    });
+  }
+
+  if (letterPresets) {
+    letterPresets.querySelectorAll('.preset-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        letterPresets.querySelectorAll('.preset-chip').forEach(function (c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        const presetKey = btn.getAttribute('data-preset');
+        if (letterTemplates[presetKey] && studioLetter) {
+          studioLetter.value = letterTemplates[presetKey];
+          updatePhoneMockup();
+        }
+      });
+    });
+  }
+
+  // ════════════════════════════════════════
+  // 4. LINK GENERATION & SHARING
+  // ════════════════════════════════════════
+  function generateShareUrl() {
+    updatePhoneMockup();
+
+    let baseUrl = window.location.origin + window.location.pathname;
+    if (baseUrl.endsWith('index.html')) {
+      baseUrl = baseUrl.replace('index.html', 'love.html');
+    } else if (!baseUrl.endsWith('love.html')) {
+      if (!baseUrl.endsWith('/')) baseUrl += '/';
+      baseUrl += 'love.html';
+    }
+
+    const payload = {
+      to: config.to,
+      from: config.from,
+      q: config.question,
+      m: config.mascot,
+      msg: config.letter
+    };
+
+    const b64 = encodePayload(payload);
+    let finalUrl = baseUrl + '?d=' + b64;
+
+    if (!b64 || finalUrl.length > 2000) {
+      const qParams = new URLSearchParams();
+      qParams.set('to', config.to);
+      qParams.set('from', config.from);
+      qParams.set('q', config.question);
+      finalUrl = baseUrl + '?' + qParams.toString();
+    }
+
+    return finalUrl;
+  }
+
+  function openShareModal() {
+    const magicUrl = generateShareUrl();
+    if (shareLinkInput) shareLinkInput.value = magicUrl;
+
+    if (btnShareWhatsapp) {
+      const waText = 'Hey ' + config.to + '... I made something special just for you 💕\nOpen it here: ' + magicUrl;
+      btnShareWhatsapp.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(waText);
+    }
+
+    drawAestheticQRCode(qrCanvas, magicUrl);
+
+    if (shareModal) shareModal.style.display = 'flex';
+    playChime();
+  }
+
+  if (btnGenerateMagic) btnGenerateMagic.addEventListener('click', openShareModal);
+
+  if (btnCopyMagic) {
+    btnCopyMagic.addEventListener('click', function () {
+      if (shareLinkInput) {
+        shareLinkInput.select();
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareLinkInput.value).then(function () {
+            btnCopyMagic.textContent = 'Copied! ✅';
+            setTimeout(function () { btnCopyMagic.textContent = 'Copy Link 📋'; }, 2000);
+          });
+        } else {
+          document.execCommand('copy');
+          btnCopyMagic.textContent = 'Copied! ✅';
+          setTimeout(function () { btnCopyMagic.textContent = 'Copy Link 📋'; }, 2000);
+        }
+        playPop();
+      }
+    });
+  }
+
+  if (btnDownloadQr) {
+    btnDownloadQr.addEventListener('click', function () {
+      if (qrCanvas) {
+        const link = document.createElement('a');
+        link.download = 'love-note-qr.png';
+        link.href = qrCanvas.toDataURL('image/png');
+        link.click();
+        playPop();
+      }
+    });
+  }
+
+  if (btnTestLink) {
+    btnTestLink.addEventListener('click', function () {
+      const url = shareLinkInput ? shareLinkInput.value : '';
+      if (url) window.open(url, '_blank');
+    });
+  }
+
+  if (btnCloseShare) btnCloseShare.addEventListener('click', function () {
+    if (shareModal) shareModal.style.display = 'none';
+  });
+  if (shareModalOverlay) shareModalOverlay.addEventListener('click', function () {
+    if (shareModal) shareModal.style.display = 'none';
+  });
+
+  if (btnNavCreate) {
+    btnNavCreate.addEventListener('click', function () {
+      const studioSec = document.getElementById('studio-section');
+      if (studioSec) studioSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  if (btnNavDemo) {
+    btnNavDemo.addEventListener('click', function () {
+      updatePhoneMockup();
+      startExperienceMode(true);
+    });
+  }
+
+  if (btnPreviewFullscreen) {
+    btnPreviewFullscreen.addEventListener('click', function () {
+      updatePhoneMockup();
+      startExperienceMode(true);
+    });
+  }
+
+  if (btnBackStudio) {
+    btnBackStudio.addEventListener('click', function () {
+      startPlatformMode();
+    });
+  }
+
+  if (btnViralCreate) {
+    btnViralCreate.addEventListener('click', function (e) {
+      e.preventDefault();
+      startPlatformMode();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // ════════════════════════════════════════
+  // 5. CLIENT-SIDE QR CODE GENERATOR
+  // ════════════════════════════════════════
+  function drawAestheticQRCode(canvas, text) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    ctx.clearRect(0, 0, size, size);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+
+    const grid = 25;
+    const cellSize = (size - 24) / grid;
+    const offset = 12;
+
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash |= 0;
+    }
+
+    function isFinder(r, c) {
+      if (r < 7 && c < 7) return true;
+      if (r < 7 && c >= grid - 7) return true;
+      if (r >= grid - 7 && c < 7) return true;
+      return false;
+    }
+
+    function isCenterHeart(r, c) {
+      return r >= 10 && r <= 14 && c >= 10 && c <= 14;
+    }
+
+    function drawFinder(sr, sc) {
+      ctx.fillStyle = '#d63384';
+      ctx.fillRect(offset + sc * cellSize, offset + sr * cellSize, 7 * cellSize, 7 * cellSize);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(offset + (sc + 1) * cellSize, offset + (sr + 1) * cellSize, 5 * cellSize, 5 * cellSize);
+      ctx.fillStyle = '#d63384';
+      ctx.fillRect(offset + (sc + 2) * cellSize, offset + (sr + 2) * cellSize, 3 * cellSize, 3 * cellSize);
+    }
+
+    ctx.fillStyle = '#222222';
+    for (let r = 0; r < grid; r++) {
+      for (let c = 0; c < grid; c++) {
+        if (isFinder(r, c) || isCenterHeart(r, c)) continue;
+        if (r === 6 || c === 6) {
+          if ((r + c) % 2 === 0) {
+            ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize - 0.5, cellSize - 0.5);
+          }
+          continue;
+        }
+        const bit = Math.abs(Math.sin((hash + r * 37 + c * 19) * 0.1) * 10000) % 2 > 0.9;
+        if (bit) {
+          ctx.fillStyle = ((r + c) % 5 === 0) ? '#ff3366' : '#222222';
+          ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize - 0.5, cellSize - 0.5);
+        }
+      }
+    }
+
+    drawFinder(0, 0);
+    drawFinder(0, grid - 7);
+    drawFinder(grid - 7, 0);
+
+    const centerSize = 5 * cellSize;
+    const centerPos = offset + 10 * cellSize;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(centerPos + centerSize / 2, centerPos + centerSize / 2, centerSize / 1.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.font = '22px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('💖', centerPos + centerSize / 2, centerPos + centerSize / 2);
+  }
+
+  // ════════════════════════════════════════
+  // 6. FLOATING HEARTS BACKGROUND
   // ════════════════════════════════════════
   const heartColors = ['#ff6b9d', '#ff3d7f', '#e91e63', '#ff9a9e', '#f8bbd0', '#ffcdd2', '#ff80ab'];
   let hearts = [];
@@ -119,7 +546,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.restore();
   }
 
-  let heartAnimFrame;
   function animateHearts() {
     if (!heartsCtx) return;
     heartsCtx.clearRect(0, 0, heartsCanvas.width, heartsCanvas.height);
@@ -137,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
       drawHeart(heartsCtx, wx, h.y, h.size, h.color, h.opacity, h.rotation);
     }
 
-    heartAnimFrame = requestAnimationFrame(animateHearts);
+    requestAnimationFrame(animateHearts);
   }
 
   resizeCanvas(heartsCanvas);
@@ -145,7 +571,7 @@ document.addEventListener('DOMContentLoaded', function () {
   animateHearts();
 
   // ════════════════════════════════════════
-  // 2. WEB AUDIO — Sound Effects
+  // 7. WEB AUDIO: SOUND SYNTHESIZER
   // ════════════════════════════════════════
   function ensureAudioCtx() {
     if (!audioCtx) {
@@ -185,7 +611,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { playTone(1047, 0.35, 'sine', 0.1); }, 420);
   }
 
-  // Audio toggle
   if (audioToggle) {
     audioToggle.addEventListener('click', function () {
       audioEnabled = !audioEnabled;
@@ -198,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ════════════════════════════════════════
-  // 3. STAGE TRANSITIONS
+  // 8. ASK LOVE: INTERACTIVE STAGES
   // ════════════════════════════════════════
   const allStages = [stageQuestion, stageCelebrate, stageLetter, stageDate];
 
@@ -209,20 +634,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (target) {
       target.style.display = 'flex';
       target.style.animation = 'none';
-      // Force reflow
       void target.offsetWidth;
       target.style.animation = 'fadeInUp 0.7s cubic-bezier(0.22,0.61,0.36,1)';
     }
   }
 
-  // ════════════════════════════════════════
-  // 4. NO BUTTON — Dodging & State Machine
-  // ════════════════════════════════════════
   function updateStage() {
     const s = stages[currentStage % stages.length];
-    if (mascot)       mascot.textContent       = s.mascot;
-    if (questionText) questionText.textContent  = s.question;
-    if (subtitleText) subtitleText.textContent   = s.subtitle;
+    if (mascot) mascot.textContent = s.mascot;
+    if (questionText) questionText.textContent = (currentStage === 0) ? config.question : s.question;
+    if (subtitleText) subtitleText.textContent = (currentStage === 0) ? ('~ ' + config.from + ' is waiting for your answer') : s.subtitle;
 
     if (pleaMessage) {
       pleaMessage.textContent = s.plea;
@@ -245,11 +666,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (btnNo) {
-    btnNo.addEventListener('click', function (e) {
+    btnNo.addEventListener('click', function () {
       noCount++;
       currentStage++;
 
-      // After 10th No — button disappears forever!
       if (noCount >= 10) {
         btnNo.style.transition = 'all 0.6s ease';
         btnNo.style.transform = 'scale(0)';
@@ -272,7 +692,6 @@ document.addEventListener('DOMContentLoaded', function () {
           noCounter.textContent = 'You said no 10 times! The No button has left the chat 👋😂';
         }
 
-        // Make Yes button extra big and irresistible
         yesScale = 2.5;
         if (btnYes) {
           btnYes.style.transform = 'scale(' + yesScale + ')';
@@ -283,48 +702,36 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Update content
       updateStage();
 
-      // Show counter
       if (noCounter) {
         noCounter.textContent = 'You said no ' + noCount + ' time' + (noCount > 1 ? 's' : '') + '! 😤';
         noCounter.classList.add('visible');
         noCounter.style.display = 'block';
       }
 
-      // Grow Yes button
       yesScale = Math.min(2.5, yesScale + 0.18);
       if (btnYes) {
         btnYes.style.transform = 'scale(' + yesScale + ')';
         btnYes.classList.add('glow');
       }
 
-      // Shrink No button
       noScale = Math.max(0.5, noScale - 0.08);
       btnNo.style.transform = 'scale(' + noScale + ')';
 
-      // Start dodging after 3rd no
       if (noCount >= 3 && !btnNo.classList.contains('dodging')) {
         btnNo.classList.add('dodging');
-        buttonsContainer.style.minHeight = '120px';
+        if (buttonsContainer) buttonsContainer.style.minHeight = '120px';
       }
 
-      if (noCount >= 3) {
-        dodgeButton();
-      }
-
+      if (noCount >= 3) dodgeButton();
       playPop();
     });
 
-    // Dodge on hover (desktop) — only when dodging is active
     btnNo.addEventListener('mouseenter', function () {
-      if (btnNo.classList.contains('dodging')) {
-        dodgeButton();
-      }
+      if (btnNo.classList.contains('dodging')) dodgeButton();
     });
 
-    // Dodge on touch (mobile)
     btnNo.addEventListener('touchstart', function (e) {
       if (btnNo.classList.contains('dodging')) {
         e.preventDefault();
@@ -333,9 +740,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { passive: false });
   }
 
-  // ════════════════════════════════════════
-  // 5. YES BUTTON — Celebration!
-  // ════════════════════════════════════════
   if (btnYes) {
     btnYes.addEventListener('click', function () {
       playSuccess();
@@ -345,11 +749,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ════════════════════════════════════════
-  // 6. CONFETTI SYSTEM
+  // 9. CONFETTI & HEART FIREWORKS
   // ════════════════════════════════════════
   let confettiParticles = [];
-  let confettiAnimFrame;
-
   function launchConfetti() {
     if (!confettiCanvas || !confettiCtx) return;
     resizeCanvas(confettiCanvas);
@@ -360,7 +762,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     '#ffea00', '#76ff03', '#00e5ff', '#d500f9', '#651fff'];
 
     for (let i = 0; i < 180; i++) {
-      const isHeart = Math.random() < 0.3;
       confettiParticles.push({
         x: window.innerWidth * 0.5 + (Math.random() - 0.5) * 200,
         y: window.innerHeight * 0.4,
@@ -372,7 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rotSpeed: (Math.random() - 0.5) * 0.3,
         gravity: 0.18 + Math.random() * 0.12,
         friction: 0.985 + Math.random() * 0.01,
-        isHeart: isHeart,
+        isHeart: Math.random() < 0.3,
         opacity: 1
       });
     }
@@ -389,10 +790,7 @@ document.addEventListener('DOMContentLoaded', function () {
         p.y  += p.vy;
         p.rotation += p.rotSpeed;
 
-        if (elapsed > 2500) {
-          p.opacity = Math.max(0, p.opacity - 0.02);
-        }
-
+        if (elapsed > 2500) p.opacity = Math.max(0, p.opacity - 0.02);
         if (p.opacity <= 0) continue;
 
         confettiCtx.save();
@@ -407,31 +805,28 @@ document.addEventListener('DOMContentLoaded', function () {
           confettiCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
           confettiCtx.restore();
         }
-
         confettiCtx.restore();
       }
 
       if (elapsed < 5000) {
-        confettiAnimFrame = requestAnimationFrame(animConfetti);
+        requestAnimationFrame(animConfetti);
       } else {
         confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
       }
     }
-
     animConfetti();
   }
 
   // ════════════════════════════════════════
-  // 7. LOVE LETTER
+  // 10. 3D FLOATING ENVELOPE & LETTER
   // ════════════════════════════════════════
   if (btnNext) {
     btnNext.addEventListener('click', function () {
       playChime();
       showStage(stageLetter);
-
-      // Populate letter with personalized names
-      if (letterTo)   letterTo.textContent   = personTo || 'Sweetheart';
-      if (letterFrom) letterFrom.textContent = personFrom || 'Your Secret Admirer';
+      if (letterTo) letterTo.textContent = config.to;
+      if (letterFrom) letterFrom.textContent = config.from;
+      if (letterContent) letterContent.textContent = config.letter;
     });
   }
 
@@ -452,14 +847,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Envelope open
   if (envelope) {
     envelope.addEventListener('click', function () {
       if (!envelope.classList.contains('open')) {
         envelope.classList.add('open');
         playChime();
 
-        // Spawn popping hearts from envelope location
         const rect = envelope.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height * 0.4;
@@ -470,18 +863,12 @@ document.addEventListener('DOMContentLoaded', function () {
           setTimeout(function () { envelopeHint.style.display = 'none'; }, 300);
         }
 
-        // Envelope dissolves & disappears, letter smoothly centers!
         setTimeout(function () {
-          const envArea = document.getElementById('envelope-area');
-          if (envArea) {
-            envArea.classList.add('disappearing');
+          if (envelopeArea) {
+            envelopeArea.classList.add('disappearing');
             setTimeout(function () {
-              envArea.style.display = 'none';
-              // Letter emerges centered
-              if (letter) {
-                letter.style.display = 'block';
-              }
-              // Button appears below the centered letter
+              envelopeArea.style.display = 'none';
+              if (letterEl) letterEl.style.display = 'block';
               setTimeout(function () {
                 if (btnDate) {
                   btnDate.style.display = 'inline-block';
@@ -496,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ════════════════════════════════════════
-  // 8. DATE PLANNER
+  // 11. DATE PLANNER & RESTART
   // ════════════════════════════════════════
   if (btnDate) {
     btnDate.addEventListener('click', function () {
@@ -505,16 +892,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Date card selection
   const dateCards = document.querySelectorAll('.date-card');
   dateCards.forEach(function (card) {
     card.addEventListener('click', function () {
-      // Deselect all
       dateCards.forEach(function (c) { c.classList.remove('selected'); });
-      // Select this
       card.classList.add('selected');
       const dateText = card.getAttribute('data-date');
-
       playChime();
 
       if (dateResult) {
@@ -525,172 +908,70 @@ document.addEventListener('DOMContentLoaded', function () {
         dateResult.style.animation = 'fadeInUp 0.6s ease';
       }
 
-      if (btnRestart) {
-        btnRestart.style.display = 'inline-block';
-      }
+      if (btnRestart) btnRestart.style.display = 'inline-block';
     });
   });
 
-  // Restart
+  function resetExperienceState() {
+    currentStage = 0;
+    noCount = 0;
+    yesScale = 1;
+    noScale = 1;
+
+    if (btnYes) {
+      btnYes.style.transform = 'scale(1)';
+      btnYes.classList.remove('glow');
+    }
+    if (btnNo) {
+      btnNo.style.transform = 'scale(1)';
+      btnNo.classList.remove('dodging');
+      btnNo.style.left = '';
+      btnNo.style.top  = '';
+      btnNo.style.opacity = '1';
+      btnNo.style.pointerEvents = 'auto';
+      btnNo.style.display = 'inline-block';
+    }
+    if (buttonsContainer) buttonsContainer.style.minHeight = '70px';
+
+    updateStage();
+
+    if (noCounter) {
+      noCounter.classList.remove('visible');
+      noCounter.style.display = 'none';
+    }
+
+    if (envelopeArea) {
+      envelopeArea.style.display = 'flex';
+      envelopeArea.classList.remove('disappearing');
+    }
+    if (envelope) envelope.classList.remove('open');
+    if (letterEl) letterEl.style.display = 'none';
+    if (envelopeHint) {
+      envelopeHint.style.display = 'block';
+      envelopeHint.style.opacity = '1';
+    }
+    if (btnDate) btnDate.style.display = 'none';
+
+    dateCards.forEach(function (c) { c.classList.remove('selected'); });
+    if (dateResult) dateResult.style.display = 'none';
+    if (btnRestart) btnRestart.style.display = 'none';
+  }
+
   if (btnRestart) {
     btnRestart.addEventListener('click', function () {
-      // Reset state
-      currentStage = 0;
-      noCount = 0;
-      yesScale = 1;
-      noScale = 1;
-
-      // Reset buttons
-      if (btnYes) {
-        btnYes.style.transform = 'scale(1)';
-        btnYes.classList.remove('glow');
-      }
-      if (btnNo) {
-        btnNo.style.transform = 'scale(1)';
-        btnNo.classList.remove('dodging');
-        btnNo.style.left = '';
-        btnNo.style.top  = '';
-        btnNo.style.opacity = '1';
-        btnNo.style.pointerEvents = 'auto';
-        btnNo.style.display = 'inline-block';
-      }
-      if (buttonsContainer) buttonsContainer.style.minHeight = '70px';
-
-      // Reset content
-      updateStage();
-      if (noCounter) {
-        noCounter.classList.remove('visible');
-        noCounter.style.display = 'none';
-      }
-
-      // Reset envelope & letter
-      const envArea = document.getElementById('envelope-area');
-      if (envArea) {
-        envArea.style.display = 'flex';
-        envArea.classList.remove('disappearing');
-      }
-      if (envelope) envelope.classList.remove('open');
-      if (letter) letter.style.display = 'none';
-      if (envelopeHint) {
-        envelopeHint.style.display = 'block';
-        envelopeHint.style.opacity = '1';
-      }
-      if (btnDate) btnDate.style.display = 'none';
-
-      // Reset date
-      dateCards.forEach(function (c) { c.classList.remove('selected'); });
-      if (dateResult)  dateResult.style.display  = 'none';
-      if (btnRestart)  btnRestart.style.display  = 'none';
-
-      // Show question stage
+      resetExperienceState();
       showStage(stageQuestion);
       playPop();
     });
   }
 
   // ════════════════════════════════════════
-  // 9. CUSTOMIZER MODAL
-  // ════════════════════════════════════════
-  if (btnCustomize) {
-    btnCustomize.addEventListener('click', function () {
-      if (customizerModal) customizerModal.style.display = 'flex';
-      playPop();
-    });
-  }
-
-  if (btnCloseModal) {
-    btnCloseModal.addEventListener('click', function () {
-      if (customizerModal) customizerModal.style.display = 'none';
-    });
-  }
-
-  if (modalOverlay) {
-    modalOverlay.addEventListener('click', function () {
-      if (customizerModal) customizerModal.style.display = 'none';
-    });
-  }
-
-  if (btnGenerate) {
-    btnGenerate.addEventListener('click', function () {
-      const toVal   = (inputTo   ? inputTo.value.trim()   : '') || '';
-      const fromVal = (inputFrom ? inputFrom.value.trim() : '') || '';
-
-      const base = window.location.href.split('?')[0];
-      let url = base;
-      const params = [];
-      if (toVal)   params.push('to=' + encodeURIComponent(toVal));
-      if (fromVal) params.push('from=' + encodeURIComponent(fromVal));
-      if (params.length) url += '?' + params.join('&');
-
-      if (generatedLink) generatedLink.value = url;
-      if (linkResult)    linkResult.style.display = 'block';
-
-      playChime();
-    });
-  }
-
-  if (btnCopy) {
-    btnCopy.addEventListener('click', function () {
-      const link = generatedLink ? generatedLink.value : '';
-      if (link && navigator.clipboard) {
-        navigator.clipboard.writeText(link).then(function () {
-          btnCopy.textContent = 'Copied! ✅';
-          setTimeout(function () { btnCopy.textContent = 'Copy Link 📋'; }, 2000);
-        });
-      } else if (link) {
-        // Fallback
-        generatedLink.select();
-        document.execCommand('copy');
-        btnCopy.textContent = 'Copied! ✅';
-        setTimeout(function () { btnCopy.textContent = 'Copy Link 📋'; }, 2000);
-      }
-      playPop();
-    });
-  }
-
-  // ════════════════════════════════════════
-  // 10. WINDOW RESIZE
+  // 12. WINDOW RESIZE
   // ════════════════════════════════════════
   window.addEventListener('resize', function () {
     resizeCanvas(heartsCanvas);
     resizeCanvas(confettiCanvas);
     createHearts();
   });
-
-  // ════════════════════════════════════════
-  // 11. SPARKLE DECORATIONS ON GLASS CARDS
-  // ════════════════════════════════════════
-  function addSparkles() {
-    const cards = document.querySelectorAll('.glass-card');
-    const sparkleChars = ['✦', '✧', '⋆', '˚', '·'];
-    cards.forEach(function (card) {
-      if (card.querySelector('.sparkle')) return; // already added
-      for (let i = 0; i < 5; i++) {
-        const sp = document.createElement('span');
-        sp.className = 'sparkle';
-        sp.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
-        sp.style.top  = (Math.random() * 100) + '%';
-        sp.style.left = (Math.random() * 100) + '%';
-        sp.style.animationDelay = (Math.random() * 3) + 's';
-        sp.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
-        sp.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        card.appendChild(sp);
-      }
-    });
-  }
-  addSparkles();
-
-  // ════════════════════════════════════════
-  // 12. INITIAL PERSONALIZATION FROM URL
-  // ════════════════════════════════════════
-  if (personTo || personFrom) {
-    const subText = personFrom
-      ? '~ ' + personFrom + ' is waiting for your answer'
-      : '~ Someone special is waiting for your answer';
-    if (subtitleText) subtitleText.textContent = subText;
-
-    // Update first stage data
-    stages[0].subtitle = subText;
-  }
 
 });

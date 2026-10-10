@@ -1,144 +1,331 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💖 Do You Love Me? 💖</title>
+    <title>💖 Love Studio — Create Your Personalized Love Note 💖</title>
+    <meta name="description" content="Create a playful, impossible-to-say-no interactive love note for your partner with dodging buttons, floating love letters, and confetti!">
     <meta name="theme-color" content="#ff6b9d">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body class="platform-mode">
+    <!-- Floating Hearts Canvas Background -->
     <canvas id="hearts-canvas" aria-label="Floating hearts background"></canvas>
     
+    <!-- Audio Toggle -->
     <button id="audio-toggle" aria-label="Toggle audio">🔇</button>
-    
-    <!-- Stage 1: The Question -->
-    <div id="stage-question" class="stage active">
-        <div class="glass-card">
-            <div id="mascot" aria-label="Cute mascot">(づ｡◕‿‿◕｡)づ</div>
-            <h1 id="question-text">Do you love me? 🥺</h1>
-            <p id="subtitle-text">~ Someone special is waiting for your answer</p>
-            <p id="plea-message"></p>
-            <div class="buttons-container" id="buttons-container">
-                <button id="btn-yes" class="btn btn-yes">Yes 💖</button>
-                <button id="btn-no" class="btn btn-no">No 😤</button>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav" id="top-nav">
+        <div class="nav-brand">
+            <span class="nav-logo">💖</span>
+            <span class="nav-title">LoveStudio</span>
+        </div>
+        <div class="nav-actions">
+            <button id="btn-nav-demo" class="nav-btn secondary">👁️ Try Demo</button>
+            <button id="btn-nav-create" class="nav-btn primary">✨ Create Note</button>
+        </div>
+    </header>
+
+    <!-- Back to Studio Button (Visible in Experience / Demo Mode) -->
+    <button id="btn-back-studio" class="back-to-studio-btn" style="display:none;" aria-label="Back to Studio">
+        ← Back to Studio
+    </button>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 1. PLATFORM CREATOR DASHBOARD                                  -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <main id="platform-dashboard" class="platform-dashboard">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">✨ Free & Instant • No Sign-up Required</div>
+            <h1 class="hero-title">Express Your Love In The Most Unforgettable Way 💕</h1>
+            <p class="hero-subtitle">
+                Create a playful, impossible-to-say-no interactive proposal link for your partner.
+                Featuring the infamous runaway "No" button, 3D sealed love letter, and confetti celebration!
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">🔒 100% Private (Encoded in Link)</span>
+                <span class="stat-pill">🎯 100% Success Rate</span>
+                <span class="stat-pill">📱 Works on All Phones</span>
             </div>
-            <p id="no-counter" class="no-counter"></p>
-        </div>
-    </div>
+        </section>
 
-    <!-- Stage 2: Celebration -->
-    <div id="stage-celebrate" class="stage" style="display:none;">
-        <canvas id="confetti-canvas" aria-label="Confetti animation"></canvas>
-        <div class="glass-card celebrate-card">
-            <div class="celebrate-mascot">٩(♡ε♡)۶</div>
-            <h1>Yaaaay! I knew it! 🎉💖</h1>
-            <p>You just made someone the happiest person alive!</p>
-            <div class="big-heart">❤️</div>
-            <button id="btn-next" class="btn btn-love">Open your love letter 💌</button>
-        </div>
-    </div>
+        <!-- Studio Creator & Live Preview -->
+        <section class="studio-section" id="studio-section">
+            <div class="studio-grid">
+                <!-- Left: Customizer Form -->
+                <div class="creator-card glass-card">
+                    <h2 class="creator-title">✨ Customize Your Love Note</h2>
+                    <p class="creator-desc">Fill in the details below. Watch the live preview update in real-time!</p>
 
-    <!-- Stage 3: Love Letter -->
-    <div id="stage-letter" class="stage" style="display:none;">
-        <div class="glass-card letter-card">
-            <h1 class="letter-title">A Letter For You 💌</h1>
+                    <!-- Step 1: Names -->
+                    <div class="form-group">
+                        <label class="form-label" for="studio-to">
+                            <span>1. Who is this for? 💕</span>
+                            <span class="label-hint">Their name or cute nickname</span>
+                        </label>
+                        <input type="text" id="studio-to" class="studio-input" placeholder="e.g. Priya, Babu, My Sunshine" value="Sweetheart">
+                    </div>
 
-            <!-- Floating Sealed Envelope -->
-            <div class="envelope-area" id="envelope-area">
-                <div class="envelope" id="envelope">
-                    <div class="envelope-back"></div>
-                    <div class="envelope-pocket"></div>
-                    <div class="envelope-flap" id="envelope-flap">
-                        <div class="envelope-seal" id="envelope-seal">💖</div>
+                    <div class="form-group">
+                        <label class="form-label" for="studio-from">
+                            <span>2. From whom? 💝</span>
+                            <span class="label-hint">Your name or sign-off</span>
+                        </label>
+                        <input type="text" id="studio-from" class="studio-input" placeholder="e.g. Somu, Your Favorite Person" value="Your Secret Admirer">
+                    </div>
+
+                    <!-- Step 2: The Question -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>3. The Big Question 💍</span>
+                            <span class="label-hint">Choose a preset or type your own</span>
+                        </label>
+                        <div class="preset-chips" id="question-presets">
+                            <button type="button" class="preset-chip active" data-q="Do you love me? 🥺">Do you love me? 🥺</button>
+                            <button type="button" class="preset-chip" data-q="Will you be my Valentine? 🌹">Will you be my Valentine? 🌹</button>
+                            <button type="button" class="preset-chip" data-q="Will you go on a date with me? ✨">Will you go on a date with me? ✨</button>
+                            <button type="button" class="preset-chip" data-q="custom">✏️ Custom...</button>
+                        </div>
+                        <input type="text" id="studio-question" class="studio-input" placeholder="Type your custom question..." value="Do you love me? 🥺">
+                    </div>
+
+                    <!-- Step 3: Mascot Selector -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>4. Pick a Mascot Face 🐱</span>
+                            <span class="label-hint">Appears at the top of the card</span>
+                        </label>
+                        <div class="mascot-chips" id="mascot-presets">
+                            <button type="button" class="mascot-chip active" data-mascot="(づ｡◕‿‿◕｡)づ">(づ｡◕‿‿◕｡)づ Hug</button>
+                            <button type="button" class="mascot-chip" data-mascot="(◕‿◕✿)">(◕‿◕✿) Cute</button>
+                            <button type="button" class="mascot-chip" data-mascot="( ˘ ³˘)♥">( ˘ ³˘)♥ Kiss</button>
+                            <button type="button" class="mascot-chip" data-mascot="ʕ•ᴥ•ʔ">ʕ•ᴥ•ʔ Bear</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Secret Love Letter -->
+                    <div class="form-group">
+                        <label class="form-label" for="studio-letter">
+                            <span>5. The Secret Love Letter 💌</span>
+                            <span class="label-hint">Unfolds when they open the 3D envelope</span>
+                        </label>
+                        <div class="letter-presets" id="letter-presets">
+                            <button type="button" class="preset-chip active" data-preset="romantic">Romantic 💕</button>
+                            <button type="button" class="preset-chip" data-preset="playful">Playful 😜</button>
+                            <button type="button" class="preset-chip" data-preset="poetic">Poetic 🌌</button>
+                            <button type="button" class="preset-chip" data-preset="short">Short 🌸</button>
+                        </div>
+                        <textarea id="studio-letter" class="studio-textarea" rows="4" placeholder="Write your heartfelt message here...">From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don't need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕</textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="creator-actions">
+                        <button id="btn-generate-magic" class="btn btn-love btn-large">
+                            <span>Generate Magic Link ✨</span>
+                        </button>
+                        <button id="btn-preview-fullscreen" class="btn btn-secondary">
+                            <span>👁️ Test Interactive Flow</span>
+                        </button>
                     </div>
                 </div>
-                <div class="envelope-shadow" id="envelope-shadow"></div>
-            </div>
 
-            <!-- The Letter (Emerges & centers when envelope is opened) -->
-            <div class="letter" id="letter" style="display:none;">
-                <div class="letter-stamp">💌</div>
-                <h2>My Dearest <span id="letter-to"></span>,</h2>
-                <p class="letter-content">
-                    From the moment you came into my life, everything changed for the better.
-                    Every smile of yours lights up my entire world, and every moment we share 
-                    becomes my most treasured memory. I don't need the stars when I have the 
-                    sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕
-                </p>
-                <p class="letter-sign">Forever yours,<br><span id="letter-from"></span></p>
-                <div class="letter-hearts">💗 💖 💕 💞 💓</div>
-            </div>
+                <!-- Right: Live Interactive Phone Mockup -->
+                <div class="preview-column">
+                    <div class="preview-header">
+                        <span class="preview-indicator">🔴 LIVE PREVIEW</span>
+                        <span class="preview-tip">Updates automatically as you type</span>
+                    </div>
 
-            <p class="envelope-hint" id="envelope-hint">✨ Click the envelope to open ✨</p>
-            <button id="btn-date" class="btn btn-love" style="display:none; margin-top: 20px;">Plan our next date? 🌹</button>
+                    <!-- Realistic Smartphone Frame -->
+                    <div class="phone-mockup">
+                        <div class="phone-speaker"></div>
+                        <div class="phone-camera"></div>
+                        <div class="phone-screen">
+                            <div class="mockup-content">
+                                <div class="mockup-card">
+                                    <div id="mockup-mascot" class="mockup-mascot">(づ｡◕‿‿◕｡)づ</div>
+                                    <h3 id="mockup-question" class="mockup-question">Do you love me? 🥺</h3>
+                                    <p id="mockup-subtitle" class="mockup-subtitle">~ Someone special is waiting for your answer</p>
+                                    <div class="mockup-buttons">
+                                        <div class="mockup-btn yes">Yes 💖</div>
+                                        <div class="mockup-btn no">No 😤</div>
+                                    </div>
+                                    <div class="mockup-preview-badge">Tap buttons in interactive test</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Footer -->
+        <footer class="platform-footer">
+            <p>Made with <span class="credit-heart">❤️</span> by <strong>Somu & Nanu</strong></p>
+            <p class="footer-sub">Share the love • Free & open for everyone</p>
+        </footer>
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 2. THE PARTNER "ASK LOVE" EXPERIENCE                           -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="experience-container" class="experience-container" style="display:none;">
+        <!-- Stage 1: The Question -->
+        <div id="stage-question" class="stage active">
+            <div class="glass-card">
+                <div id="mascot" aria-label="Cute mascot">(づ｡◕‿‿◕｡)づ</div>
+                <h1 id="question-text">Do you love me? 🥺</h1>
+                <p id="subtitle-text">~ Someone special is waiting for your answer</p>
+                <p id="plea-message"></p>
+                <div class="buttons-container" id="buttons-container">
+                    <button id="btn-yes" class="btn btn-yes">Yes 💖</button>
+                    <button id="btn-no" class="btn btn-no">No 😤</button>
+                </div>
+                <p id="no-counter" class="no-counter"></p>
+            </div>
         </div>
+
+        <!-- Stage 2: Celebration -->
+        <div id="stage-celebrate" class="stage" style="display:none;">
+            <canvas id="confetti-canvas" aria-label="Confetti animation"></canvas>
+            <div class="glass-card celebrate-card">
+                <div class="celebrate-mascot">٩(♡ε♡)۶</div>
+                <h1>Yaaaay! I knew it! 🎉💖</h1>
+                <p>You just made someone the happiest person alive!</p>
+                <div class="big-heart">❤️</div>
+                <button id="btn-next" class="btn btn-love">Open your love letter 💌</button>
+            </div>
+        </div>
+
+        <!-- Stage 3: Love Letter -->
+        <div id="stage-letter" class="stage" style="display:none;">
+            <div class="glass-card letter-card">
+                <h1 class="letter-title">A Letter For You 💌</h1>
+
+                <!-- Floating Sealed Envelope -->
+                <div class="envelope-area" id="envelope-area">
+                    <div class="envelope" id="envelope">
+                        <div class="envelope-back"></div>
+                        <div class="envelope-pocket"></div>
+                        <div class="envelope-flap" id="envelope-flap">
+                            <div class="envelope-seal" id="envelope-seal">💖</div>
+                        </div>
+                    </div>
+                    <div class="envelope-shadow" id="envelope-shadow"></div>
+                </div>
+
+                <!-- The Letter (Emerges & centers when envelope is opened) -->
+                <div class="letter" id="letter" style="display:none;">
+                    <div class="letter-stamp">💌</div>
+                    <h2>My Dearest <span id="letter-to"></span>,</h2>
+                    <p class="letter-content" id="letter-content">
+                        From the moment you came into my life, everything changed for the better.
+                        Every smile of yours lights up my entire world, and every moment we share 
+                        becomes my most treasured memory. I don't need the stars when I have the 
+                        sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕
+                    </p>
+                    <p class="letter-sign">Forever yours,<br><span id="letter-from"></span></p>
+                    <div class="letter-hearts">💗 💖 💕 💞 💓</div>
+                </div>
+
+                <p class="envelope-hint" id="envelope-hint">✨ Click the envelope to open ✨</p>
+                <button id="btn-date" class="btn btn-love" style="display:none; margin-top: 20px;">Plan our next date? 🌹</button>
+            </div>
+        </div>
+
+        <!-- Stage 4: Date Planner -->
+        <div id="stage-date" class="stage" style="display:none;">
+            <div class="glass-card">
+                <h1>Pick our next adventure! 🗺️</h1>
+                <p class="date-subtitle">Choose something special for us ✨</p>
+                <div class="date-grid">
+                    <div class="date-card" data-date="Stargazing Night">
+                        <span class="date-emoji">🌃</span>
+                        <span class="date-label">Stargazing Night</span>
+                    </div>
+                    <div class="date-card" data-date="Candlelight Dinner">
+                        <span class="date-emoji">🍽️</span>
+                        <span class="date-label">Candlelight Dinner</span>
+                    </div>
+                    <div class="date-card" data-date="Movie Marathon">
+                        <span class="date-emoji">🎬</span>
+                        <span class="date-label">Movie Marathon</span>
+                    </div>
+                    <div class="date-card" data-date="Beach Sunset Walk">
+                        <span class="date-emoji">🏖️</span>
+                        <span class="date-label">Beach Sunset Walk</span>
+                    </div>
+                    <div class="date-card" data-date="Amusement Park Fun">
+                        <span class="date-emoji">🎡</span>
+                        <span class="date-label">Amusement Park</span>
+                    </div>
+                    <div class="date-card" data-date="Mountain Adventure">
+                        <span class="date-emoji">🏔️</span>
+                        <span class="date-label">Mountain Adventure</span>
+                    </div>
+                </div>
+                <div id="date-result" class="date-result" style="display:none;"></div>
+                <button id="btn-restart" class="btn btn-love" style="display:none; margin-top: 20px;">Start Over 🔄</button>
+            </div>
+        </div>
+
+        <!-- Viral Call to Action Button for Partner -->
+        <button id="btn-viral-create" class="viral-create-btn" aria-label="Make your own love note">
+            ✨ Make your own love note
+        </button>
+
+        <!-- Credit Footer -->
+        <footer class="credit-footer">
+            Made with <span class="credit-heart">❤️</span> by Somu & Nanu
+        </footer>
     </div>
 
-    <!-- Stage 4: Date Planner -->
-    <div id="stage-date" class="stage" style="display:none;">
-        <div class="glass-card">
-            <h1>Pick our next adventure! 🗺️</h1>
-            <p class="date-subtitle">Choose something special for us ✨</p>
-            <div class="date-grid">
-                <div class="date-card" data-date="Stargazing Night">
-                    <span class="date-emoji">🌃</span>
-                    <span class="date-label">Stargazing Night</span>
-                </div>
-                <div class="date-card" data-date="Candlelight Dinner">
-                    <span class="date-emoji">🍽️</span>
-                    <span class="date-label">Candlelight Dinner</span>
-                </div>
-                <div class="date-card" data-date="Movie Marathon">
-                    <span class="date-emoji">🎬</span>
-                    <span class="date-label">Movie Marathon</span>
-                </div>
-                <div class="date-card" data-date="Beach Sunset Walk">
-                    <span class="date-emoji">🏖️</span>
-                    <span class="date-label">Beach Sunset Walk</span>
-                </div>
-                <div class="date-card" data-date="Amusement Park Fun">
-                    <span class="date-emoji">🎡</span>
-                    <span class="date-label">Amusement Park</span>
-                </div>
-                <div class="date-card" data-date="Mountain Adventure">
-                    <span class="date-emoji">🏔️</span>
-                    <span class="date-label">Mountain Adventure</span>
-                </div>
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 3. SHARE MODAL (Magic Link, WhatsApp, QR Code)                 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="share-modal" class="modal" style="display:none;">
+        <div class="modal-overlay" id="share-modal-overlay"></div>
+        <div class="modal-content glass-card share-card">
+            <h2 class="share-title">🎉 Your Magic Link is Ready!</h2>
+            <p class="share-subtitle">Send this to your partner and watch their reaction 💕</p>
+
+            <!-- Link Box -->
+            <div class="link-box">
+                <input type="text" readonly id="share-link-input" class="input-field share-input" aria-label="Your magic link">
+                <button id="btn-copy-magic" class="btn btn-love btn-copy">Copy Link 📋</button>
             </div>
-            <div id="date-result" class="date-result" style="display:none;"></div>
-            <button id="btn-restart" class="btn btn-love" style="display:none; margin-top: 20px;">Start Over 🔄</button>
+
+            <!-- WhatsApp Direct Share -->
+            <a id="btn-share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                <span class="wa-icon">💬</span> Share on WhatsApp
+            </a>
+
+            <!-- QR Code Section -->
+            <div class="qr-section">
+                <div class="qr-header">
+                    <span>💌 Or Download Romantic QR Card</span>
+                </div>
+                <div class="qr-canvas-wrapper">
+                    <canvas id="qr-canvas" width="200" height="200"></canvas>
+                </div>
+                <button id="btn-download-qr" class="btn btn-secondary btn-small">Download QR Card 📥</button>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="modal-actions">
+                <button id="btn-test-link" class="btn btn-love btn-small">Open & Test Link 🚀</button>
+                <button id="btn-close-share" class="btn btn-secondary btn-small">Close</button>
+            </div>
         </div>
     </div>
-
-    <!-- Customizer Modal -->
-    <div id="customizer-modal" class="modal" style="display:none;">
-        <div class="modal-overlay" id="modal-overlay"></div>
-        <div class="modal-content glass-card">
-            <h2>✨ Personalize Your Love Note ✨</h2>
-            <p style="color:#6c4a6e; margin-bottom:15px; font-size:0.9rem;">Make it special for your someone</p>
-            <input type="text" id="input-to" placeholder="Their name 💕" class="input-field" aria-label="Their name">
-            <input type="text" id="input-from" placeholder="Your name 💝" class="input-field" aria-label="Your name">
-            <button id="btn-generate" class="btn btn-love" style="margin-top:10px; width:100%;">Generate Magic Link ✨</button>
-            <div id="link-result" style="display:none; margin-top: 15px;">
-                <input type="text" readonly id="generated-link" class="input-field" aria-label="Generated link" style="font-size:0.8rem;">
-                <button id="btn-copy" class="btn btn-secondary" style="margin-top:8px; width:100%;">Copy Link 📋</button>
-            </div>
-            <button id="btn-close-modal" class="btn btn-secondary" style="margin-top: 15px; width:100%;">Close</button>
-        </div>
-    </div>
-
-    <button id="btn-customize" class="customize-fab" aria-label="Customize">✨ Customize</button>
-
-    <footer class="credit-footer">
-        Made with <span class="credit-heart">❤️</span> by Somu & Nanu
-    </footer>
 
     <script src="./script.js"></script>
 </body>

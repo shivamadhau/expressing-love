@@ -1,38 +1,48 @@
-﻿# 💖 Expressing Love — Interactive Romantic Web App
+﻿# 💖 Love Studio — The Interactive Romantic Proposal Platform
 
-A modern, delightful, and interactive "Do You Love Me?" web experience built with pure HTML5, CSS3, and Vanilla JavaScript.
+A modern, viral web platform where anyone can create a personalized, impossible-to-say-no interactive proposal link for their partner in 30 seconds.
 
 Made with ❤️ by **Somu & Nanu**.
 
 ---
 
-## ✨ Features
+## 🚀 Live Links
 
-- 🌈 **Aurora Animated Background**: Soft, breathing romantic gradient.
-- 💕 **Floating Hearts Canvas**: 30+ bezier-curve heart particles drifting smoothly with wobble physics.
-- 🪟 **Glassmorphism UI**: Modern frosted-glass aesthetic with floating animations.
-- 🎭 **8 Escalating Pleas**: Dynamic kaomoji mascot reactions and funny persuasive messages.
-- 📏 **Growing "Yes" Button**: Increases in size and glows brighter with each rejection attempt.
-- 🏃 **Dodging "No" Button**: Intelligently dodges cursor and mobile touch after 3 clicks.
-- 💨 **10th "No" Vanish**: The No button completely dissolves on the 10th attempt with a witty plea!
-- 🎊 **Confetti & Heart Fireworks**: 180-particle explosion celebrating acceptance.
-- 💌 **Floating 3D Love Letter**: A sealed floating envelope with a pulsing wax seal that bursts open into a centered love note.
-- 🌹 **Date Planner**: 6 interactive romantic date choices.
-- ✨ **Customizer & Sharing**: Generate personalized shareable links with custom `to` and `from` names.
-- 🔊 **Synthesized Web Audio**: Cute sound effects without external audio files.
+- **Love Studio Platform (Creator Dashboard)**: [https://shivamadhau.github.io/expressing-love/](https://shivamadhau.github.io/expressing-love/)
+- **GitHub Repository**: [https://github.com/shivamadhau/expressing-love](https://github.com/shivamadhau/expressing-love)
+- **1-Click Vercel Deploy**: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/shivamadhau/expressing-love)
 
 ---
 
-## 🚀 Live Demo
+## ✨ Platform Features
 
-- Ready for 1-click deployment on **Vercel** or **GitHub Pages**!
-- Simply open `index.html` in any browser — zero build tools or dependencies required.
+### 1. 🎨 The Creator Dashboard (`/index.html`)
+- **Step-by-step customizer**:
+  - Partner's Name / Pet Name (e.g. *Priya*, *Babu*, *My Sunshine*)
+  - Your Name / Sign-off (e.g. *Somu*, *Your Secret Admirer*)
+  - The Question (presets or custom write-in)
+  - Cute Mascot Selection
+  - Secret Love Letter (4 romantic presets + freeform writing)
+- **Real-Time Phone Mockup**:
+  - Live smartphone frame that reflects changes immediately as you type.
+- **Magic Link Generator**:
+  - Encoded URL with zero database required — 100% free hosting forever!
+  - 1-Click WhatsApp direct share with pre-filled teaser message.
+  - Client-side romantic QR Code generator with 1-click image download.
+
+### 2. 💌 The Partner Experience ("Ask Love") (`/love.html` or `/?d=...`)
+- Customized question & mascot
+- Evasive "No" button that dodges cursor & mobile touch
+- Progressive growing "Yes" button
+- **10th "No" Vanish**: The No button completely dissolves, leaving only Yes!
+- Confetti & heart fireworks explosion
+- 3D Floating sealed envelope with beating heart wax seal that dissolves to center the letter
+- Interactive date planner
+- Footer badge: *"Made with ❤️ by Somu & Nanu"*
+- Viral CTA: *"Make your own love note ✨"*
 
 ---
 
-## 💌 Personalize Your Link
+## 🛠️ Zero Build Tools Required
 
-Add URL query parameters to customize the experience:
-```
-https://your-domain.vercel.app/?to=Sweetheart&from=YourName
-```
+Built with pure, vanilla HTML5, CSS3, and JavaScript. Runs offline and online anywhere.

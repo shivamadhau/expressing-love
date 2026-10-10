@@ -893,3 +893,639 @@ p {
 .hidden {
   display: none !important;
 }
+/* ═══════════════════════════════════════════════════════════════
+   💖 LOVE STUDIO — PLATFORM & DASHBOARD STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+body.platform-mode {
+  display: block !important;
+  overflow-y: auto !important;
+}
+
+body.experience-mode {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* ── Top Nav ── */
+.top-nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.08);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: #d63384;
+  font-weight: 700;
+  user-select: none;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.nav-btn.primary {
+  background: linear-gradient(135deg, #ff6b9d, #e91e63);
+  color: white;
+  box-shadow: 0 4px 14px rgba(255, 107, 157, 0.35);
+}
+
+.nav-btn.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+}
+
+.nav-btn.secondary {
+  background: rgba(255, 255, 255, 0.7);
+  color: #d63384;
+  border: 1px solid rgba(255, 107, 157, 0.3);
+}
+
+.nav-btn.secondary:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+/* ── Back to Studio Button ── */
+.back-to-studio-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 55;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #d63384;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 107, 157, 0.22);
+  transition: all 0.3s ease;
+}
+
+.back-to-studio-btn:hover {
+  background: white;
+  transform: scale(1.06);
+}
+
+/* ── Hero Section ── */
+.hero-section {
+  text-align: center;
+  padding: 50px 20px 30px;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 107, 157, 0.35);
+  color: #d63384;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 18px;
+  border-radius: 50px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px rgba(255, 107, 157, 0.15);
+}
+
+.hero-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.4rem;
+  line-height: 1.25;
+  color: #d63384;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 18px rgba(214, 51, 132, 0.22);
+}
+
+.hero-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  color: #6c4a6e;
+  line-height: 1.7;
+  max-width: 680px;
+  margin: 0 auto 24px;
+}
+
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.stat-pill {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #7b4c73;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.08);
+}
+
+/* ── Studio Section ── */
+.studio-section {
+  max-width: 1160px;
+  margin: 10px auto 70px;
+  padding: 0 24px;
+}
+
+.studio-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 36px;
+  align-items: start;
+}
+
+.creator-card {
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  border-radius: 30px;
+  padding: 38px 34px;
+  box-shadow: 0 12px 45px rgba(255, 107, 157, 0.16);
+  text-align: left;
+  animation: none !important;
+}
+
+.creator-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.3rem;
+  color: #d63384;
+  margin-bottom: 6px;
+}
+
+.creator-desc {
+  font-size: 0.92rem;
+  color: #7b4c73;
+  margin-bottom: 26px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #d63384;
+}
+
+.label-hint {
+  font-size: 0.76rem;
+  font-weight: 400;
+  color: #9c6c8e;
+}
+
+.studio-input, .studio-textarea {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 107, 157, 0.28);
+  background: rgba(255, 255, 255, 0.75);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.studio-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.studio-input:focus, .studio-textarea:focus {
+  border-color: #ff6b9d;
+  background: white;
+  box-shadow: 0 0 18px rgba(255, 107, 157, 0.28);
+}
+
+.preset-chips, .mascot-chips, .letter-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.preset-chip, .mascot-chip {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 107, 157, 0.28);
+  color: #7b4c73;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 7px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.preset-chip:hover, .mascot-chip:hover {
+  background: white;
+  border-color: #ff6b9d;
+  transform: translateY(-2px);
+}
+
+.preset-chip.active, .mascot-chip.active {
+  background: linear-gradient(135deg, #ff6b9d, #e91e63);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 3px 12px rgba(255, 107, 157, 0.4);
+}
+
+.creator-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 16px 32px;
+  font-size: 1.05rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ── Phone Mockup Column ── */
+.preview-column {
+  position: sticky;
+  top: 90px;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 0 8px;
+}
+
+.preview-indicator {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e91e63;
+  letter-spacing: 0.8px;
+}
+
+.preview-tip {
+  font-size: 0.75rem;
+  color: #8c5a80;
+}
+
+.phone-mockup {
+  width: 330px;
+  height: 570px;
+  background: #141416;
+  border-radius: 44px;
+  padding: 12px;
+  margin: 0 auto;
+  box-shadow:
+    0 25px 65px rgba(214, 51, 132, 0.28),
+    0 10px 25px rgba(0, 0, 0, 0.22),
+    inset 0 0 0 3px #38383c;
+  position: relative;
+}
+
+.phone-speaker {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 5px;
+  background: #252528;
+  border-radius: 10px;
+  z-index: 5;
+}
+
+.phone-camera {
+  position: absolute;
+  top: 20px;
+  right: 95px;
+  width: 9px;
+  height: 9px;
+  background: #1e1e20;
+  border-radius: 50%;
+  border: 1px solid #333;
+  z-index: 5;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 34px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f, #ff9a9e);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.mockup-content {
+  width: 100%;
+  text-align: center;
+}
+
+.mockup-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 22px;
+  padding: 26px 18px;
+  box-shadow: 0 10px 30px rgba(255, 107, 157, 0.18);
+}
+
+.mockup-mascot {
+  font-size: 2.6rem;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.mockup-question {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  color: #d63384;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.mockup-subtitle {
+  font-size: 0.75rem;
+  color: #6c4a6e;
+  margin-bottom: 18px;
+}
+
+.mockup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.mockup-btn {
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mockup-btn.yes {
+  background: linear-gradient(135deg, #ff6b9d, #e91e63);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.45);
+}
+
+.mockup-btn.no {
+  background: #a0a0a0;
+  color: white;
+}
+
+.mockup-preview-badge {
+  font-size: 0.68rem;
+  color: #b07095;
+  margin-top: 4px;
+}
+
+/* ── Platform Footer ── */
+.platform-footer {
+  text-align: center;
+  padding: 40px 20px 50px;
+  font-size: 0.88rem;
+  color: #7b4c73;
+}
+
+.footer-sub {
+  font-size: 0.78rem;
+  color: #a07498;
+  margin-top: 6px;
+}
+
+/* ── Share Modal & Elements ── */
+.share-card {
+  max-width: 500px !important;
+  text-align: center;
+  padding: 38px 30px !important;
+}
+
+.share-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.4rem;
+  color: #d63384;
+  margin-bottom: 6px;
+}
+
+.share-subtitle {
+  font-size: 0.92rem;
+  color: #6c4a6e;
+  margin-bottom: 22px;
+}
+
+.link-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.share-input {
+  margin: 0 !important;
+  text-align: left !important;
+  font-size: 0.85rem !important;
+  padding: 12px 16px !important;
+}
+
+.btn-copy {
+  padding: 12px 22px !important;
+  font-size: 0.9rem !important;
+  white-space: nowrap;
+}
+
+.btn-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  text-decoration: none;
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.38);
+  transition: all 0.3s ease;
+}
+
+.btn-whatsapp:hover {
+  background: #20bd5a;
+  transform: scale(1.02);
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.48);
+}
+
+.wa-icon {
+  font-size: 1.25rem;
+}
+
+.qr-section {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.qr-header {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #d63384;
+  margin-bottom: 12px;
+}
+
+.qr-canvas-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#qr-canvas {
+  background: white;
+  padding: 12px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.15);
+}
+
+.btn-small {
+  padding: 9px 20px !important;
+  font-size: 0.85rem !important;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* ── Viral CTA Button on Partner Experience ── */
+.viral-create-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  z-index: 45;
+  background: linear-gradient(135deg, #ff6b9d, #e91e63);
+  color: white;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 107, 157, 0.4);
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.viral-create-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 25px rgba(255, 107, 157, 0.55);
+}
+
+/* ── Responsive Studio Layout ── */
+@media (max-width: 900px) {
+  .studio-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .preview-column {
+    position: static;
+    order: -1; /* Show preview up top or below */
+  }
+
+  .hero-title {
+    font-size: 2.6rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .top-nav {
+    padding: 12px 18px;
+  }
+
+  .nav-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .creator-card {
+    padding: 26px 18px;
+  }
+
+  .phone-mockup {
+    width: 290px;
+    height: 500px;
+  }
+
+  .viral-create-btn {
+    bottom: 55px;
+    right: 12px;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+  }
+}
