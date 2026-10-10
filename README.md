@@ -2,7 +2,7 @@
 
 A modern, viral web platform where anyone can create a personalized, impossible-to-say-no interactive proposal link for their partner in 30 seconds.
 
-Made with ❤️ by **Somu & Nanu**.
+Made with ❤️ by **White Labs**.
 
 ---
 
@@ -38,7 +38,7 @@ Made with ❤️ by **Somu & Nanu**.
 - Confetti & heart fireworks explosion
 - 3D Floating sealed envelope with beating heart wax seal that dissolves to center the letter
 - Interactive date planner
-- Footer badge: *"Made with ❤️ by Somu & Nanu"*
+- Footer badge: *"Made with ❤️ by White Labs"*
 - Viral CTA: *"Make your own love note ✨"*
 
 ---
