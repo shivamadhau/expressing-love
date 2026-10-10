@@ -41,6 +41,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -53,6 +54,38 @@ body {
   animation: gradient-shift 20s ease infinite;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* ── Soft Glassmorphism Scrollbars ── */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 245, 247, 0.45);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 107, 157, 0.4), rgba(233, 30, 99, 0.4));
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(255, 77, 132, 0.75), rgba(233, 30, 99, 0.75));
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background-clip: padding-box;
+}
+
+/* Firefox soft scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 107, 157, 0.45) rgba(255, 245, 247, 0.3);
 }
 
 @keyframes gradient-shift {
