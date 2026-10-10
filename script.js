@@ -291,13 +291,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnNo) {
       btnNo.style.transform = 'scale(1)';
       btnNo.classList.remove('dodging');
+      btnNo.style.position = '';
       btnNo.style.left = '';
       btnNo.style.top  = '';
       btnNo.style.opacity = '1';
       btnNo.style.pointerEvents = 'auto';
       btnNo.style.display = 'inline-block';
     }
-    if (buttonsContainer) buttonsContainer.style.minHeight = '70px';
+    if (buttonsContainer) {
+      buttonsContainer.classList.remove('has-dodging');
+      buttonsContainer.style.minHeight = '80px';
+    }
+    lastDodgeX = -1;
+    lastDodgeY = -1;
 
     updateStage();
 
@@ -957,14 +963,58 @@ document.addEventListener('DOMContentLoaded', function () {
   animateHearts();
 
   // ─── 13. BUTTON ACTIONS: RESPONSIVE YES & DODGING NO ───
+  let lastDodgeX = -1;
+  let lastDodgeY = -1;
+
   function dodgeButton() {
     if (!btnNo || !buttonsContainer) return;
+
+    if (!btnNo.classList.contains('dodging')) {
+      btnNo.classList.add('dodging');
+    }
+    btnNo.style.position = 'absolute';
+    buttonsContainer.classList.add('has-dodging');
+    buttonsContainer.style.minHeight = '140px';
+
     const containerRect = buttonsContainer.getBoundingClientRect();
     const btnRect = btnNo.getBoundingClientRect();
-    const maxW = Math.max(10, containerRect.width - btnRect.width - 6);
-    const maxH = Math.max(10, containerRect.height - btnRect.height - 6);
-    const newX = Math.max(4, Math.min(maxW, Math.random() * maxW));
-    const newY = Math.max(4, Math.min(maxH, Math.random() * maxH));
+    const yesRect = btnYes ? btnYes.getBoundingClientRect() : null;
+
+    const maxW = Math.max(10, containerRect.width - btnRect.width - 12);
+    const maxH = Math.max(10, containerRect.height - btnRect.height - 12);
+
+    let newX = 6;
+    let newY = 6;
+    let attempts = 0;
+
+    function overlapsYes(x, y, w, h) {
+      if (!yesRect) return false;
+      const yL = yesRect.left - containerRect.left - 8;
+      const yR = yesRect.right - containerRect.left + 8;
+      const yT = yesRect.top - containerRect.top - 8;
+      const yB = yesRect.bottom - containerRect.top + 8;
+      return !(x + w < yL || x > yR || y + h < yT || y > yB);
+    }
+
+    while (attempts < 12) {
+      const candidateX = Math.round(6 + Math.random() * maxW);
+      const candidateY = Math.round(6 + Math.random() * maxH);
+
+      const dist = (lastDodgeX >= 0) ? Math.hypot(candidateX - lastDodgeX, candidateY - lastDodgeY) : 999;
+
+      if (dist >= 45 && !overlapsYes(candidateX, candidateY, btnRect.width, btnRect.height)) {
+        newX = candidateX;
+        newY = candidateY;
+        break;
+      }
+      newX = candidateX;
+      newY = candidateY;
+      attempts++;
+    }
+
+    lastDodgeX = newX;
+    lastDodgeY = newY;
+
     btnNo.style.left = newX + 'px';
     btnNo.style.top  = newY + 'px';
   }
@@ -1028,12 +1078,8 @@ document.addEventListener('DOMContentLoaded', function () {
     noScale = Math.max(0.5, noScale - 0.08);
     btnNo.style.transform = 'scale(' + noScale + ')';
 
-    if (noCount >= 3 && !btnNo.classList.contains('dodging')) {
-      btnNo.classList.add('dodging');
-      if (buttonsContainer) buttonsContainer.style.minHeight = '120px';
-    }
-
-    if (noCount >= 3) dodgeButton();
+    // Dodge immediately on every click
+    dodgeButton();
     playPop();
   }
 
@@ -1044,15 +1090,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     btnNo.addEventListener('mouseenter', function () {
-      if (btnNo.classList.contains('dodging')) dodgeButton();
-    });
-
-    btnNo.addEventListener('touchstart', function (e) {
       if (btnNo.classList.contains('dodging')) {
-        e.preventDefault();
         dodgeButton();
       }
-    }, { passive: false });
+    });
+
+    btnNo.addEventListener('pointerdown', function () {
+      initAudio();
+    });
   }
 
   if (btnYes) {
