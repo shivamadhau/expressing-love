@@ -4,7 +4,8 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // ─── DOM References: Platform Dashboard ───
+  // ─── 1. ALL DOM REFERENCES GATHERED AT TOP ───
+  // Platform Dashboard
   const platformDashboard  = document.getElementById('platform-dashboard');
   const experienceContainer= document.getElementById('experience-container');
   const topNav              = document.getElementById('top-nav');
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnTestLink         = document.getElementById('btn-test-link');
   const btnCloseShare       = document.getElementById('btn-close-share');
 
-  // ─── DOM References: Partner Experience ───
+  // Partner Experience Elements
   const heartsCanvas        = document.getElementById('hearts-canvas');
   const heartsCtx           = heartsCanvas ? heartsCanvas.getContext('2d') : null;
   const audioToggle         = document.getElementById('audio-toggle');
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const stageCelebrate      = document.getElementById('stage-celebrate');
   const stageLetter         = document.getElementById('stage-letter');
   const stageDate           = document.getElementById('stage-date');
+  const allStages           = [stageQuestion, stageCelebrate, stageLetter, stageDate];
 
   const mascot              = document.getElementById('mascot');
   const questionText        = document.getElementById('question-text');
@@ -72,12 +74,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnDate             = document.getElementById('btn-date');
   const envelopeHint        = document.getElementById('envelope-hint');
 
+  const dateCards           = document.querySelectorAll('.date-card');
   const dateResult          = document.getElementById('date-result');
   const btnRestart          = document.getElementById('btn-restart');
 
-  // ─── State & Default Configuration ───
+  // ─── 2. TEMPLATES & STATE ───
   const letterTemplates = {
-    romantic: "From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don\'t need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕",
+    romantic: "From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don't need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕",
     playful: "You are officially my favorite human, my emergency contact for late-night food cravings, and the only person I will gladly share my dessert with. Life with you is my favorite comedy show. Love you endlessly, you adorable weirdo! 😜💖",
     poetic: "In a world spinning with infinite chaos, you are my serene silence. You are the poetry I never knew how to write, the sunlit morning after endless rain, and the home my soul was always searching for. Forever and always. 🌌✨",
     short: "Just a sweet little reminder that you mean the entire universe to me. Thank you for being you, and for making my heart skip a beat every single day. I love you so much! 🌸💕"
@@ -94,12 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const stages = [
     { question: 'Do you love me? 🥺',         subtitle: '~ Someone special is waiting for your answer', mascot: '(づ｡◕‿‿◕｡)づ',  plea: '' },
     { question: 'Are you sure?? 😢',           subtitle: '~ Please reconsider...',                      mascot: '(╥﹏╥)',        plea: 'Nooo! Please think again! 🥺' },
-    { question: 'Really really sure? 😭',      subtitle: '~ My heart is breaking...',                   mascot: '(இ﹏இ)',        plea: "You\'re breaking my heart! 💔" },
-    { question: 'Pretty pleaseee? 🙏',         subtitle: "~ I\'ll be the best!",                         mascot: '(◕ᴗ◕✿)',       plea: 'I promise to make you smile every day! 🌹' },
-    { question: 'Last chance... 🥀',           subtitle: "~ Don\'t say no again...",                     mascot: '(╯°□°)╯︵ ┻━┻', plea: 'NOOOO! You cannot do this! 😫' },
+    { question: 'Really really sure? 😭',      subtitle: '~ My heart is breaking...',                   mascot: '(இ﹏இ)',        plea: "You're breaking my heart! 💔" },
+    { question: 'Pretty pleaseee? 🙏',         subtitle: "~ I'll be the best!",                         mascot: '(◕ᴗ◕✿)',       plea: 'I promise to make you smile every day! 🌹' },
+    { question: 'Last chance... 🥀',           subtitle: "~ Don't say no again...",                     mascot: '(╯°□°)╯︵ ┻━┻', plea: 'NOOOO! You cannot do this! 😫' },
     { question: 'Okay fine... 😞',             subtitle: '~ But look how cute I am!',                   mascot: '(◕‿◕)',         plea: 'Look at my face. HOW CAN YOU SAY NO?! 🐱' },
-    { question: "I\'m not giving up! 💪",       subtitle: "~ Because you\'re worth it",                   mascot: '(ง •̀_•́)ง',     plea: 'I will NEVER stop asking! 😤💖' },
-    { question: 'PLEASE SAY YES!! 😩',         subtitle: "~ I\'m on my knees!",                          mascot: '🧎‍♂️',           plea: "I\'m literally begging you right now 🥺🙏" },
+    { question: "I'm not giving up! 💪",       subtitle: "~ Because you're worth it",                   mascot: '(ง •̀_•́)ง',     plea: 'I will NEVER stop asking! 😤💖' },
+    { question: 'PLEASE SAY YES!! 😩',         subtitle: "~ I'm on my knees!",                          mascot: '🧎‍♂️',           plea: "I'm literally begging you right now 🥺🙏" },
   ];
 
   let currentStage = 0;
@@ -110,21 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let noScale      = 1;
   let isDemoMode   = false;
 
-  // ════════════════════════════════════════
-  // 1. DATA ENCODING & URL PARSING
-  // ════════════════════════════════════════
-
-  function encodePayload(obj) {
-    try {
-      const json = JSON.stringify(obj);
-      return btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, function (_, p1) {
-        return String.fromCharCode('0x' + p1);
-      })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    } catch (e) {
-      return '';
-    }
-  }
-
+  // ─── 3. CLEAN & SHORT URL PARSING ───
   function decodePayload(str) {
     try {
       let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -140,43 +129,128 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
-    const dParam = params.get('d');
-    if (dParam) {
-      const decoded = decodePayload(dParam);
-      if (decoded) return decoded;
-    }
     const to = params.get('to');
     const from = params.get('from');
     const q = params.get('q');
     const mascot = params.get('m');
-    const msg = params.get('msg');
-    if (to || from || q || msg) {
+    const letterKey = params.get('letter') || params.get('p');
+    const customMsg = params.get('msg');
+
+    if (to || from || q || customMsg || letterKey) {
+      let resolvedLetter = letterTemplates.romantic;
+      if (customMsg) {
+        resolvedLetter = customMsg;
+      } else if (letterKey && letterTemplates[letterKey]) {
+        resolvedLetter = letterTemplates[letterKey];
+      }
+
       return {
         to: to || 'Sweetheart',
         from: from || 'Your Secret Admirer',
         question: q || 'Do you love me? 🥺',
         mascot: mascot || '(づ｡◕‿‿◕｡)づ',
-        letter: msg || letterTemplates.romantic
+        letter: resolvedLetter
       };
     }
+
+    // Support legacy d param if someone still opens old base64 link
+    const dParam = params.get('d');
+    if (dParam) {
+      const decoded = decodePayload(dParam);
+      if (decoded) return decoded;
+    }
+
     return null;
   }
 
-  // ════════════════════════════════════════
-  // 2. MODE DETERMINATION & ROUTING
-  // ════════════════════════════════════════
-  const isLovePage = window.location.pathname.endsWith('love.html');
-  const partnerData = getUrlParams();
-
-  if (isLovePage || partnerData) {
-    if (partnerData) {
-      config = Object.assign({}, config, partnerData);
+  // ─── 4. STAGE DISPLAY & STATE RESET ───
+  function showStage(target) {
+    allStages.forEach(function (s) {
+      if (s) s.style.display = 'none';
+    });
+    if (target) {
+      target.style.display = 'flex';
+      target.style.animation = 'none';
+      void target.offsetWidth;
+      target.style.animation = 'fadeInUp 0.7s cubic-bezier(0.22,0.61,0.36,1)';
     }
-    startExperienceMode(false);
-  } else {
-    startPlatformMode();
   }
 
+  function updateStage() {
+    const s = stages[currentStage % stages.length];
+    if (mascot) mascot.textContent = (currentStage === 0) ? config.mascot : s.mascot;
+    if (questionText) questionText.textContent = (currentStage === 0) ? config.question : s.question;
+    if (subtitleText) subtitleText.textContent = (currentStage === 0) ? ('~ ' + config.from + ' is waiting for your answer') : s.subtitle;
+
+    if (pleaMessage) {
+      pleaMessage.textContent = s.plea;
+      pleaMessage.classList.remove('shake');
+      void pleaMessage.offsetWidth;
+      if (s.plea) pleaMessage.classList.add('shake');
+    }
+  }
+
+  function resetExperienceState() {
+    currentStage = 0;
+    noCount = 0;
+    yesScale = 1;
+    noScale = 1;
+
+    if (btnYes) {
+      btnYes.style.transform = 'scale(1)';
+      btnYes.classList.remove('glow');
+    }
+    if (btnNo) {
+      btnNo.style.transform = 'scale(1)';
+      btnNo.classList.remove('dodging');
+      btnNo.style.left = '';
+      btnNo.style.top  = '';
+      btnNo.style.opacity = '1';
+      btnNo.style.pointerEvents = 'auto';
+      btnNo.style.display = 'inline-block';
+    }
+    if (buttonsContainer) buttonsContainer.style.minHeight = '70px';
+
+    updateStage();
+
+    if (noCounter) {
+      noCounter.classList.remove('visible');
+      noCounter.style.display = 'none';
+    }
+
+    if (envelopeArea) {
+      envelopeArea.style.display = 'flex';
+      envelopeArea.classList.remove('disappearing');
+    }
+    if (envelope) envelope.classList.remove('open');
+    if (letterEl) letterEl.style.display = 'none';
+    if (envelopeHint) {
+      envelopeHint.style.display = 'block';
+      envelopeHint.style.opacity = '1';
+    }
+    if (btnDate) btnDate.style.display = 'none';
+
+    if (dateCards && dateCards.length) {
+      dateCards.forEach(function (c) { c.classList.remove('selected'); });
+    }
+    if (dateResult) dateResult.style.display = 'none';
+    if (btnRestart) btnRestart.style.display = 'none';
+  }
+
+  function applyConfigToExperience() {
+    if (questionText) questionText.textContent = config.question;
+    if (subtitleText) subtitleText.textContent = '~ ' + config.from + ' is waiting for your answer';
+    if (mascot) mascot.textContent = config.mascot;
+    if (letterTo) letterTo.textContent = config.to;
+    if (letterFrom) letterFrom.textContent = config.from;
+    if (letterContent) letterContent.textContent = config.letter;
+
+    stages[0].question = config.question;
+    stages[0].subtitle = '~ ' + config.from + ' is waiting for your answer';
+    stages[0].mascot = config.mascot;
+  }
+
+  // ─── 5. MODE ROUTING ───
   function startPlatformMode() {
     document.body.classList.add('platform-mode');
     document.body.classList.remove('experience-mode');
@@ -205,22 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     showStage(stageQuestion);
   }
 
-  function applyConfigToExperience() {
-    if (questionText) questionText.textContent = config.question;
-    if (subtitleText) subtitleText.textContent = '~ ' + config.from + ' is waiting for your answer';
-    if (mascot) mascot.textContent = config.mascot;
-    if (letterTo) letterTo.textContent = config.to;
-    if (letterFrom) letterFrom.textContent = config.from;
-    if (letterContent) letterContent.textContent = config.letter;
-
-    stages[0].question = config.question;
-    stages[0].subtitle = '~ ' + config.from + ' is waiting for your answer';
-    stages[0].mascot = config.mascot;
-  }
-
-  // ════════════════════════════════════════
-  // 3. PLATFORM STUDIO: REACTIVE MOCKUP
-  // ════════════════════════════════════════
+  // ─── 6. PLATFORM CREATOR: REACTIVE PHONE MOCKUP ───
   function updatePhoneMockup() {
     const toVal = studioTo ? (studioTo.value.trim() || 'Sweetheart') : 'Sweetheart';
     const fromVal = studioFrom ? (studioFrom.value.trim() || 'Your Secret Admirer') : 'Your Secret Admirer';
@@ -288,9 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ════════════════════════════════════════
-  // 4. LINK GENERATION & SHARING
-  // ════════════════════════════════════════
+  // ─── 7. SHORT & CLEAN LINK GENERATOR ───
   function generateShareUrl() {
     updatePhoneMockup();
 
@@ -302,26 +359,34 @@ document.addEventListener('DOMContentLoaded', function () {
       baseUrl += 'love.html';
     }
 
-    const payload = {
-      to: config.to,
-      from: config.from,
-      q: config.question,
-      m: config.mascot,
-      msg: config.letter
-    };
+    const qParams = new URLSearchParams();
+    qParams.set('to', config.to || 'Sweetheart');
+    qParams.set('from', config.from || 'Your Secret Admirer');
 
-    const b64 = encodePayload(payload);
-    let finalUrl = baseUrl + '?d=' + b64;
-
-    if (!b64 || finalUrl.length > 2000) {
-      const qParams = new URLSearchParams();
-      qParams.set('to', config.to);
-      qParams.set('from', config.from);
+    if (config.question && config.question !== 'Do you love me? 🥺') {
       qParams.set('q', config.question);
-      finalUrl = baseUrl + '?' + qParams.toString();
     }
 
-    return finalUrl;
+    if (config.mascot && config.mascot !== '(づ｡◕‿‿◕｡)づ') {
+      qParams.set('m', config.mascot);
+    }
+
+    // Check if letter matches one of the presets
+    let matchedPreset = null;
+    for (const key in letterTemplates) {
+      if (letterTemplates[key] === config.letter) {
+        matchedPreset = key;
+        break;
+      }
+    }
+
+    if (matchedPreset && matchedPreset !== 'romantic') {
+      qParams.set('letter', matchedPreset);
+    } else if (!matchedPreset && config.letter) {
+      qParams.set('msg', config.letter);
+    }
+
+    return baseUrl + '?' + qParams.toString();
   }
 
   function openShareModal() {
@@ -421,9 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ════════════════════════════════════════
-  // 5. CLIENT-SIDE QR CODE GENERATOR
-  // ════════════════════════════════════════
+  // ─── 8. CLIENT-SIDE QR CODE GENERATOR ───
   function drawAestheticQRCode(canvas, text) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -498,9 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.fillText('💖', centerPos + centerSize / 2, centerPos + centerSize / 2);
   }
 
-  // ════════════════════════════════════════
-  // 6. FLOATING HEARTS BACKGROUND
-  // ════════════════════════════════════════
+  // ─── 9. FLOATING HEARTS BACKGROUND ───
   const heartColors = ['#ff6b9d', '#ff3d7f', '#e91e63', '#ff9a9e', '#f8bbd0', '#ffcdd2', '#ff80ab'];
   let hearts = [];
 
@@ -570,29 +631,32 @@ document.addEventListener('DOMContentLoaded', function () {
   createHearts();
   animateHearts();
 
-  // ════════════════════════════════════════
-  // 7. WEB AUDIO: SOUND SYNTHESIZER
-  // ════════════════════════════════════════
+  // ─── 10. WEB AUDIO SYSTEM ───
   function ensureAudioCtx() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    try {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    } catch (e) {}
   }
 
   function playTone(freq, duration, type, vol, ramp) {
     if (!audioEnabled) return;
-    ensureAudioCtx();
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type || 'sine';
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    if (ramp) osc.frequency.linearRampToValueAtTime(ramp, audioCtx.currentTime + duration);
-    gain.gain.setValueAtTime(vol || 0.12, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    try {
+      ensureAudioCtx();
+      if (!audioCtx) return;
+      const osc  = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      if (ramp) osc.frequency.linearRampToValueAtTime(ramp, audioCtx.currentTime + duration);
+      gain.gain.setValueAtTime(vol || 0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch (e) {}
   }
 
   function playPop() {
@@ -622,37 +686,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ════════════════════════════════════════
-  // 8. ASK LOVE: INTERACTIVE STAGES
-  // ════════════════════════════════════════
-  const allStages = [stageQuestion, stageCelebrate, stageLetter, stageDate];
-
-  function showStage(target) {
-    allStages.forEach(function (s) {
-      if (s) s.style.display = 'none';
-    });
-    if (target) {
-      target.style.display = 'flex';
-      target.style.animation = 'none';
-      void target.offsetWidth;
-      target.style.animation = 'fadeInUp 0.7s cubic-bezier(0.22,0.61,0.36,1)';
-    }
-  }
-
-  function updateStage() {
-    const s = stages[currentStage % stages.length];
-    if (mascot) mascot.textContent = s.mascot;
-    if (questionText) questionText.textContent = (currentStage === 0) ? config.question : s.question;
-    if (subtitleText) subtitleText.textContent = (currentStage === 0) ? ('~ ' + config.from + ' is waiting for your answer') : s.subtitle;
-
-    if (pleaMessage) {
-      pleaMessage.textContent = s.plea;
-      pleaMessage.classList.remove('shake');
-      void pleaMessage.offsetWidth;
-      if (s.plea) pleaMessage.classList.add('shake');
-    }
-  }
-
+  // ─── 11. BUTTON ACTIONS: RESPONSIVE YES & DODGING NO ───
   function dodgeButton() {
     if (!btnNo || !buttonsContainer) return;
     const containerRect = buttonsContainer.getBoundingClientRect();
@@ -665,67 +699,73 @@ document.addEventListener('DOMContentLoaded', function () {
     btnNo.style.top  = newY + 'px';
   }
 
-  if (btnNo) {
-    btnNo.addEventListener('click', function () {
-      noCount++;
-      currentStage++;
+  function handleNoAction() {
+    noCount++;
+    currentStage++;
 
-      if (noCount >= 10) {
-        btnNo.style.transition = 'all 0.6s ease';
-        btnNo.style.transform = 'scale(0)';
-        btnNo.style.opacity = '0';
-        btnNo.style.pointerEvents = 'none';
-        setTimeout(function () {
-          btnNo.style.display = 'none';
-        }, 600);
+    // 10th No: Vanish permanently!
+    if (noCount >= 10) {
+      btnNo.style.transition = 'all 0.6s ease';
+      btnNo.style.transform = 'scale(0)';
+      btnNo.style.opacity = '0';
+      btnNo.style.pointerEvents = 'none';
+      setTimeout(function () {
+        btnNo.style.display = 'none';
+      }, 600);
 
-        if (questionText) questionText.textContent = 'You have no other option now! 😏';
-        if (subtitleText) subtitleText.textContent = '~ Just click Yes already 💖';
-        if (mascot) mascot.textContent = '( ˘ ³˘)♥';
-        if (pleaMessage) {
-          pleaMessage.textContent = 'The No button gave up on you too 😂💀';
-          pleaMessage.classList.remove('shake');
-          void pleaMessage.offsetWidth;
-          pleaMessage.classList.add('shake');
-        }
-        if (noCounter) {
-          noCounter.textContent = 'You said no 10 times! The No button has left the chat 👋😂';
-        }
-
-        yesScale = 2.5;
-        if (btnYes) {
-          btnYes.style.transform = 'scale(' + yesScale + ')';
-          btnYes.classList.add('glow');
-        }
-
-        playPop();
-        return;
+      if (questionText) questionText.textContent = 'You have no other option now! 😏';
+      if (subtitleText) subtitleText.textContent = '~ Just click Yes already 💖';
+      if (mascot) mascot.textContent = '( ˘ ³˘)♥';
+      if (pleaMessage) {
+        pleaMessage.textContent = 'The No button gave up on you too 😂💀';
+        pleaMessage.classList.remove('shake');
+        void pleaMessage.offsetWidth;
+        pleaMessage.classList.add('shake');
       }
-
-      updateStage();
-
       if (noCounter) {
-        noCounter.textContent = 'You said no ' + noCount + ' time' + (noCount > 1 ? 's' : '') + '! 😤';
-        noCounter.classList.add('visible');
-        noCounter.style.display = 'block';
+        noCounter.textContent = 'You said no 10 times! The No button has left the chat 👋😂';
       }
 
-      yesScale = Math.min(2.5, yesScale + 0.18);
+      yesScale = 2.5;
       if (btnYes) {
         btnYes.style.transform = 'scale(' + yesScale + ')';
         btnYes.classList.add('glow');
       }
 
-      noScale = Math.max(0.5, noScale - 0.08);
-      btnNo.style.transform = 'scale(' + noScale + ')';
-
-      if (noCount >= 3 && !btnNo.classList.contains('dodging')) {
-        btnNo.classList.add('dodging');
-        if (buttonsContainer) buttonsContainer.style.minHeight = '120px';
-      }
-
-      if (noCount >= 3) dodgeButton();
       playPop();
+      return;
+    }
+
+    updateStage();
+
+    if (noCounter) {
+      noCounter.textContent = 'You said no ' + noCount + ' time' + (noCount > 1 ? 's' : '') + '! 😤';
+      noCounter.classList.add('visible');
+      noCounter.style.display = 'block';
+    }
+
+    yesScale = Math.min(2.5, yesScale + 0.18);
+    if (btnYes) {
+      btnYes.style.transform = 'scale(' + yesScale + ')';
+      btnYes.classList.add('glow');
+    }
+
+    noScale = Math.max(0.5, noScale - 0.08);
+    btnNo.style.transform = 'scale(' + noScale + ')';
+
+    if (noCount >= 3 && !btnNo.classList.contains('dodging')) {
+      btnNo.classList.add('dodging');
+      if (buttonsContainer) buttonsContainer.style.minHeight = '120px';
+    }
+
+    if (noCount >= 3) dodgeButton();
+    playPop();
+  }
+
+  if (btnNo) {
+    btnNo.addEventListener('click', function (e) {
+      e.stopPropagation();
+      handleNoAction();
     });
 
     btnNo.addEventListener('mouseenter', function () {
@@ -741,16 +781,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (btnYes) {
-    btnYes.addEventListener('click', function () {
+    btnYes.addEventListener('click', function (e) {
+      e.stopPropagation();
       playSuccess();
       showStage(stageCelebrate);
       launchConfetti();
     });
   }
 
-  // ════════════════════════════════════════
-  // 9. CONFETTI & HEART FIREWORKS
-  // ════════════════════════════════════════
+  // ─── 12. CONFETTI & FIREWORKS ───
   let confettiParticles = [];
   function launchConfetti() {
     if (!confettiCanvas || !confettiCtx) return;
@@ -817,9 +856,7 @@ document.addEventListener('DOMContentLoaded', function () {
     animConfetti();
   }
 
-  // ════════════════════════════════════════
-  // 10. 3D FLOATING ENVELOPE & LETTER
-  // ════════════════════════════════════════
+  // ─── 13. FLOATING ENVELOPE & LETTER ───
   if (btnNext) {
     btnNext.addEventListener('click', function () {
       playChime();
@@ -882,9 +919,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ════════════════════════════════════════
-  // 11. DATE PLANNER & RESTART
-  // ════════════════════════════════════════
+  // ─── 14. DATE PLANNER & RESTART ───
   if (btnDate) {
     btnDate.addEventListener('click', function () {
       playChime();
@@ -892,69 +927,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  const dateCards = document.querySelectorAll('.date-card');
-  dateCards.forEach(function (card) {
-    card.addEventListener('click', function () {
-      dateCards.forEach(function (c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
-      const dateText = card.getAttribute('data-date');
-      playChime();
+  if (dateCards && dateCards.length) {
+    dateCards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        dateCards.forEach(function (c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        const dateText = card.getAttribute('data-date');
+        playChime();
 
-      if (dateResult) {
-        dateResult.textContent = "It's a date! " + dateText + " 💕";
-        dateResult.style.display = 'block';
-        dateResult.style.animation = 'none';
-        void dateResult.offsetWidth;
-        dateResult.style.animation = 'fadeInUp 0.6s ease';
-      }
+        if (dateResult) {
+          dateResult.textContent = "It's a date! " + dateText + " 💕";
+          dateResult.style.display = 'block';
+          dateResult.style.animation = 'none';
+          void dateResult.offsetWidth;
+          dateResult.style.animation = 'fadeInUp 0.6s ease';
+        }
 
-      if (btnRestart) btnRestart.style.display = 'inline-block';
+        if (btnRestart) btnRestart.style.display = 'inline-block';
+      });
     });
-  });
-
-  function resetExperienceState() {
-    currentStage = 0;
-    noCount = 0;
-    yesScale = 1;
-    noScale = 1;
-
-    if (btnYes) {
-      btnYes.style.transform = 'scale(1)';
-      btnYes.classList.remove('glow');
-    }
-    if (btnNo) {
-      btnNo.style.transform = 'scale(1)';
-      btnNo.classList.remove('dodging');
-      btnNo.style.left = '';
-      btnNo.style.top  = '';
-      btnNo.style.opacity = '1';
-      btnNo.style.pointerEvents = 'auto';
-      btnNo.style.display = 'inline-block';
-    }
-    if (buttonsContainer) buttonsContainer.style.minHeight = '70px';
-
-    updateStage();
-
-    if (noCounter) {
-      noCounter.classList.remove('visible');
-      noCounter.style.display = 'none';
-    }
-
-    if (envelopeArea) {
-      envelopeArea.style.display = 'flex';
-      envelopeArea.classList.remove('disappearing');
-    }
-    if (envelope) envelope.classList.remove('open');
-    if (letterEl) letterEl.style.display = 'none';
-    if (envelopeHint) {
-      envelopeHint.style.display = 'block';
-      envelopeHint.style.opacity = '1';
-    }
-    if (btnDate) btnDate.style.display = 'none';
-
-    dateCards.forEach(function (c) { c.classList.remove('selected'); });
-    if (dateResult) dateResult.style.display = 'none';
-    if (btnRestart) btnRestart.style.display = 'none';
   }
 
   if (btnRestart) {
@@ -965,13 +956,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ════════════════════════════════════════
-  // 12. WINDOW RESIZE
-  // ════════════════════════════════════════
+  // ─── 15. WINDOW RESIZE ───
   window.addEventListener('resize', function () {
     resizeCanvas(heartsCanvas);
     resizeCanvas(confettiCanvas);
     createHearts();
   });
+
+  // ─── 16. RUN INITIAL ROUTE ───
+  const isLovePage = window.location.pathname.endsWith('love.html');
+  const partnerData = getUrlParams();
+
+  if (isLovePage || partnerData) {
+    if (partnerData) {
+      config = Object.assign({}, config, partnerData);
+    }
+    startExperienceMode(false);
+  } else {
+    startPlatformMode();
+  }
 
 });
