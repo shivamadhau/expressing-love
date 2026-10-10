@@ -1412,59 +1412,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // ─── 19. SOFT SCROLL ENGINE (SILKY SMOOTH DAMPING) ───
-  function initSoftScroll() {
-    let isScrolling = false;
-    let targetY = window.scrollY;
-    let currentY = window.scrollY;
-    const ease = 0.12;
-
-    window.addEventListener('wheel', function (e) {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-      // Don't intercept if inside an internally scrollable element
-      let el = e.target;
-      while (el && el !== document.body && el !== document.documentElement) {
-        const overflowY = window.getComputedStyle(el).overflowY;
-        if ((overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight) {
-          return;
-        }
-        el = el.parentElement;
-      }
-
-      e.preventDefault();
-      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-      targetY = Math.max(0, Math.min(maxScroll, targetY + e.deltaY));
-
-      if (!isScrolling) {
-        isScrolling = true;
-        currentY = window.scrollY;
-        requestAnimationFrame(updateScroll);
-      }
-    }, { passive: false });
-
-    function updateScroll() {
-      const diff = targetY - currentY;
-      if (Math.abs(diff) < 0.6) {
-        currentY = targetY;
-        window.scrollTo(0, currentY);
-        isScrolling = false;
-        return;
-      }
-
-      currentY += diff * ease;
-      window.scrollTo(0, Math.round(currentY));
-      requestAnimationFrame(updateScroll);
-    }
-
-    window.addEventListener('scroll', function () {
-      if (!isScrolling) {
-        targetY = window.scrollY;
-        currentY = window.scrollY;
-      }
-    }, { passive: true });
-
-    // Smooth scroll for internal anchor links
+  // ─── 19. SMOOTH ANCHOR NAVIGATION (ZERO-DELAY NATIVE SCROLL) ───
+  function initSmoothAnchorScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
       anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
@@ -1479,7 +1428,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  initSoftScroll();
+  initSmoothAnchorScroll();
   initRoute();
 
 });
