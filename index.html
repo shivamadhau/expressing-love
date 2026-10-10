@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,11 +10,18 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="./style.css">
 </head>
 <body class="platform-mode">
+    <!-- Ambient Aura Mesh Glow Background -->
+    <div class="aura-bg" aria-hidden="true">
+        <div class="aura-orb orb-1"></div>
+        <div class="aura-orb orb-2"></div>
+        <div class="aura-orb orb-3"></div>
+    </div>
+
     <!-- Floating Hearts Canvas Background -->
     <canvas id="hearts-canvas" aria-label="Floating hearts background"></canvas>
     
@@ -23,13 +30,16 @@
 
     <!-- Top Navigation Bar -->
     <header class="top-nav" id="top-nav">
-        <div class="nav-brand">
-            <span class="nav-logo">💖</span>
-            <span class="nav-title">LoveStudio</span>
-        </div>
-        <div class="nav-actions">
-            <button id="btn-nav-demo" class="nav-btn secondary">👁️ Try Demo</button>
-            <button id="btn-nav-create" class="nav-btn primary">✨ Create Note</button>
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="nav-heart-badge">💖</span>
+                <span class="nav-title">LoveStudio</span>
+                <span class="nav-version-pill">STUDIO</span>
+            </div>
+            <div class="nav-actions">
+                <button id="btn-nav-demo" class="nav-btn secondary">👁️ Try Demo</button>
+                <button id="btn-nav-create" class="nav-btn primary">✨ Create Note</button>
+            </div>
         </div>
     </header>
 
@@ -44,94 +54,163 @@
     <main id="platform-dashboard" class="platform-dashboard">
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-badge">✨ Free & Instant • No Sign-up Required</div>
-            <h1 class="hero-title">Express Your Love In The Most Unforgettable Way 💕</h1>
+            <div class="hero-badge">
+                <span class="badge-sparkle">✨</span>
+                <span>Free & Instant • No Sign-up Required</span>
+            </div>
+            <h1 class="hero-title">
+                Express Your Love In The Most <span class="hero-title-accent">Unforgettable</span> Way 💕
+            </h1>
             <p class="hero-subtitle">
-                Create a playful, impossible-to-say-no interactive proposal link for your partner.
-                Featuring the infamous runaway "No" button, 3D sealed love letter, and confetti celebration!
+                Craft an interactive proposal link for your special someone.
+                Featuring the infamous runaway "No" button, 3D sealed love letter, and celebration confetti!
             </p>
             <div class="hero-stats">
-                <span class="stat-pill">🔒 100% Private (Encoded in Link)</span>
-                <span class="stat-pill">🎯 100% Success Rate</span>
-                <span class="stat-pill">📱 Works on All Phones</span>
+                <span class="stat-pill"><span class="stat-icon">🔒</span> 100% Private (Instant Link)</span>
+                <span class="stat-pill"><span class="stat-icon">🎯</span> 100% Yes Success Rate</span>
+                <span class="stat-pill"><span class="stat-icon">📱</span> Works on All Phones</span>
             </div>
         </section>
+
+        <!-- Mobile View Switcher (Visible only on small screens) -->
+        <div class="mobile-view-tabs" id="mobile-view-tabs">
+            <button type="button" class="mobile-tab-btn active" id="tab-btn-customize">✏️ Customize Note</button>
+            <button type="button" class="mobile-tab-btn" id="tab-btn-preview">📱 Live Phone Preview</button>
+        </div>
 
         <!-- Studio Creator & Live Preview -->
         <section class="studio-section" id="studio-section">
             <div class="studio-grid">
-                <!-- Left: Customizer Form -->
+                <!-- Left: Customizer Bento Form -->
                 <div class="creator-card glass-card">
-                    <h2 class="creator-title">✨ Customize Your Love Note</h2>
-                    <p class="creator-desc">Fill in the details below. Watch the live preview update in real-time!</p>
-
-                    <!-- Step 1: Names -->
-                    <div class="form-group">
-                        <label class="form-label" for="studio-to">
-                            <span>1. Who is this for? 💕</span>
-                            <span class="label-hint">Their name or cute nickname</span>
-                        </label>
-                        <input type="text" id="studio-to" class="studio-input" placeholder="e.g. Priya, Babu, My Sunshine" value="Sweetheart">
+                    <div class="creator-header">
+                        <div class="creator-header-icon">✨</div>
+                        <div>
+                            <h2 class="creator-title">Customize Your Love Note</h2>
+                            <p class="creator-desc">Personalize each step below. Watch the live preview update in real-time!</p>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="studio-from">
-                            <span>2. From whom? 💝</span>
-                            <span class="label-hint">Your name or sign-off</span>
-                        </label>
-                        <input type="text" id="studio-from" class="studio-input" placeholder="e.g. Somu, Your Favorite Person" value="Your Secret Admirer">
+                    <!-- Step 1: The Couple -->
+                    <div class="bento-step-card">
+                        <div class="bento-step-header">
+                            <span class="step-number">1</span>
+                            <div class="step-info">
+                                <h3>The Couple 💕</h3>
+                                <p>Who is sending and receiving this special message?</p>
+                            </div>
+                        </div>
+                        <div class="inputs-row">
+                            <div class="form-group-item">
+                                <label class="form-label" for="studio-to">
+                                    <span>Who is this for?</span>
+                                    <span class="label-tag">Recipient</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">💌</span>
+                                    <input type="text" id="studio-to" class="studio-input" placeholder="e.g. Babu, Cutie, Sweetheart" value="Sweetheart">
+                                </div>
+                            </div>
+                            <div class="form-group-item">
+                                <label class="form-label" for="studio-from">
+                                    <span>From whom?</span>
+                                    <span class="label-tag">Sender</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">💝</span>
+                                    <input type="text" id="studio-from" class="studio-input" placeholder="e.g. Somu, Your Favorite" value="Your Secret Admirer">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Step 2: The Question -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span>3. The Big Question 💍</span>
-                            <span class="label-hint">Choose a preset or type your own</span>
-                        </label>
-                        <div class="preset-chips" id="question-presets">
-                            <button type="button" class="preset-chip active" data-q="Do you love me? 🥺">Do you love me? 🥺</button>
-                            <button type="button" class="preset-chip" data-q="Will you be my Valentine? 🌹">Will you be my Valentine? 🌹</button>
-                            <button type="button" class="preset-chip" data-q="Will you go on a date with me? ✨">Will you go on a date with me? ✨</button>
-                            <button type="button" class="preset-chip" data-q="custom">✏️ Custom...</button>
+                    <div class="bento-step-card">
+                        <div class="bento-step-header">
+                            <span class="step-number">2</span>
+                            <div class="step-info">
+                                <h3>The Proposal Question 💍</h3>
+                                <p>What question will they see with the runaway "No" button?</p>
+                            </div>
                         </div>
-                        <input type="text" id="studio-question" class="studio-input" placeholder="Type your custom question..." value="Do you love me? 🥺">
+                        <div class="preset-chips" id="question-presets">
+                            <button type="button" class="preset-chip active" data-q="Do you love me? 🥺">
+                                <span class="chip-emoji">🥺</span> Do you love me?
+                            </button>
+                            <button type="button" class="preset-chip" data-q="Will you be my Valentine? 🌹">
+                                <span class="chip-emoji">🌹</span> Be my Valentine?
+                            </button>
+                            <button type="button" class="preset-chip" data-q="Will you go on a date with me? ✨">
+                                <span class="chip-emoji">✨</span> Go on a date?
+                            </button>
+                            <button type="button" class="preset-chip" data-q="custom">
+                                <span class="chip-emoji">✏️</span> Custom...
+                            </button>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="input-icon">❓</span>
+                            <input type="text" id="studio-question" class="studio-input" placeholder="Type your custom question..." value="Do you love me? 🥺">
+                        </div>
                     </div>
 
                     <!-- Step 3: Mascot Selector -->
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span>4. Pick a Mascot Face 🐱</span>
-                            <span class="label-hint">Appears at the top of the card</span>
-                        </label>
+                    <div class="bento-step-card">
+                        <div class="bento-step-header">
+                            <span class="step-number">3</span>
+                            <span class="step-info">
+                                <h3>Pick Mascot Mood 🐱</h3>
+                                <p>The cute companion reacting at the top of the card</p>
+                            </span>
+                        </div>
                         <div class="mascot-chips" id="mascot-presets">
-                            <button type="button" class="mascot-chip active" data-mascot="(づ｡◕‿‿◕｡)づ">(づ｡◕‿‿◕｡)づ Hug</button>
-                            <button type="button" class="mascot-chip" data-mascot="(◕‿◕✿)">(◕‿◕✿) Cute</button>
-                            <button type="button" class="mascot-chip" data-mascot="( ˘ ³˘)♥">( ˘ ³˘)♥ Kiss</button>
-                            <button type="button" class="mascot-chip" data-mascot="ʕ•ᴥ•ʔ">ʕ•ᴥ•ʔ Bear</button>
+                            <button type="button" class="mascot-chip active" data-mascot="(づ｡◕‿‿◕｡)づ">
+                                <span class="mascot-face">(づ｡◕‿‿◕｡)づ</span>
+                                <span class="mascot-label">Big Hug</span>
+                            </button>
+                            <button type="button" class="mascot-chip" data-mascot="(◕‿◕✿)">
+                                <span class="mascot-face">(◕‿◕✿)</span>
+                                <span class="mascot-label">Cute Blush</span>
+                            </button>
+                            <button type="button" class="mascot-chip" data-mascot="( ˘ ³˘)♥">
+                                <span class="mascot-face">( ˘ ³˘)♥</span>
+                                <span class="mascot-label">Sweet Kiss</span>
+                            </button>
+                            <button type="button" class="mascot-chip" data-mascot="ʕ•ᴥ•ʔ">
+                                <span class="mascot-face">ʕ•ᴥ•ʔ</span>
+                                <span class="mascot-label">Teddy Bear</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Step 4: Secret Love Letter -->
-                    <div class="form-group">
-                        <label class="form-label" for="studio-letter">
-                            <span>5. The Secret Love Letter 💌</span>
-                            <span class="label-hint">Unfolds when they open the 3D envelope</span>
-                        </label>
-                        <div class="letter-presets" id="letter-presets">
-                            <button type="button" class="preset-chip active" data-preset="romantic">Romantic 💕</button>
-                            <button type="button" class="preset-chip" data-preset="playful">Playful 😜</button>
-                            <button type="button" class="preset-chip" data-preset="poetic">Poetic 🌌</button>
-                            <button type="button" class="preset-chip" data-preset="short">Short 🌸</button>
+                    <div class="bento-step-card">
+                        <div class="bento-step-header">
+                            <span class="step-number">4</span>
+                            <div class="step-info">
+                                <h3>Secret Love Letter 💌</h3>
+                                <p>Emerges magically when they open the 3D sealed envelope</p>
+                            </div>
                         </div>
-                        <textarea id="studio-letter" class="studio-textarea" rows="4" placeholder="Write your heartfelt message here...">From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don't need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕</textarea>
+                        <div class="letter-presets" id="letter-presets">
+                            <button type="button" class="preset-chip active" data-preset="romantic">💕 Romantic</button>
+                            <button type="button" class="preset-chip" data-preset="playful">😜 Playful</button>
+                            <button type="button" class="preset-chip" data-preset="poetic">🌌 Poetic</button>
+                            <button type="button" class="preset-chip" data-preset="short">🌸 Sweet & Short</button>
+                        </div>
+                        <div class="textarea-wrapper">
+                            <textarea id="studio-letter" class="studio-textarea" rows="4" placeholder="Write your heartfelt message here...">From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don't need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕</textarea>
+                            <div class="char-count" id="letter-char-count">294 characters</div>
+                        </div>
                     </div>
 
                     <!-- Actions -->
                     <div class="creator-actions">
                         <button id="btn-generate-magic" class="btn btn-love btn-large">
-                            <span>Generate Magic Link ✨</span>
+                            <span class="btn-sparkle">✨</span>
+                            <span>Generate Magic Link</span>
+                            <span class="btn-arrow">→</span>
                         </button>
-                        <button id="btn-preview-fullscreen" class="btn btn-secondary">
+                        <button id="btn-preview-fullscreen" class="btn btn-secondary btn-large-secondary">
                             <span>👁️ Test Interactive Flow</span>
                         </button>
                     </div>
@@ -140,25 +219,35 @@
                 <!-- Right: Live Interactive Phone Mockup -->
                 <div class="preview-column">
                     <div class="preview-header">
-                        <span class="preview-indicator">🔴 LIVE PREVIEW</span>
+                        <div class="preview-live-badge">
+                            <span class="pulsing-dot"></span>
+                            <span>LIVE PREVIEW</span>
+                        </div>
                         <span class="preview-tip">Updates automatically as you type</span>
                     </div>
 
-                    <!-- Realistic Smartphone Frame -->
-                    <div class="phone-mockup">
-                        <div class="phone-speaker"></div>
-                        <div class="phone-camera"></div>
-                        <div class="phone-screen">
-                            <div class="mockup-content">
-                                <div class="mockup-card">
-                                    <div id="mockup-mascot" class="mockup-mascot">(づ｡◕‿‿◕｡)づ</div>
-                                    <h3 id="mockup-question" class="mockup-question">Do you love me? 🥺</h3>
-                                    <p id="mockup-subtitle" class="mockup-subtitle">~ Someone special is waiting for your answer</p>
-                                    <div class="mockup-buttons">
-                                        <div class="mockup-btn yes">Yes 💖</div>
-                                        <div class="mockup-btn no">No 😤</div>
+                    <!-- Realistic iPhone 16 Pro Frame -->
+                    <div class="phone-mockup-wrapper">
+                        <div class="floating-badge badge-top-right">💖 Live Preview</div>
+                        <div class="floating-badge badge-bottom-left">✨ 3D Envelope Inside</div>
+
+                        <div class="phone-mockup">
+                            <div class="phone-dynamic-island">
+                                <div class="island-camera"></div>
+                            </div>
+                            <div class="phone-glare"></div>
+                            <div class="phone-screen">
+                                <div class="mockup-content">
+                                    <div class="mockup-card">
+                                        <div id="mockup-mascot" class="mockup-mascot">(づ｡◕‿‿◕｡)づ</div>
+                                        <h3 id="mockup-question" class="mockup-question">Do you love me? 🥺</h3>
+                                        <p id="mockup-subtitle" class="mockup-subtitle">~ Someone special is waiting for your answer</p>
+                                        <div class="mockup-buttons">
+                                            <div class="mockup-btn yes">Yes 💖</div>
+                                            <div class="mockup-btn no">No 😤</div>
+                                        </div>
+                                        <div class="mockup-preview-badge">✨ Tap "Test Interactive Flow" to try live</div>
                                     </div>
-                                    <div class="mockup-preview-badge">Tap buttons in interactive test</div>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +258,9 @@
 
         <!-- Platform Footer -->
         <footer class="platform-footer">
-            <p>Made with <span class="credit-heart">❤️</span> by <strong>Somu & Nanu</strong></p>
+            <div class="footer-credit-pill">
+                Made with <span class="credit-heart">❤️</span> by <strong>Somu & Nanu</strong>
+            </div>
             <p class="footer-sub">Share the love • Free & open for everyone</p>
         </footer>
     </main>

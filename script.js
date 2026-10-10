@@ -19,11 +19,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const studioFrom          = document.getElementById('studio-from');
   const studioQuestion      = document.getElementById('studio-question');
   const studioLetter        = document.getElementById('studio-letter');
+  const letterCharCount     = document.getElementById('letter-char-count');
   const questionPresets     = document.getElementById('question-presets');
   const mascotPresets       = document.getElementById('mascot-presets');
   const letterPresets       = document.getElementById('letter-presets');
   const btnGenerateMagic    = document.getElementById('btn-generate-magic');
   const btnPreviewFullscreen= document.getElementById('btn-preview-fullscreen');
+  const tabBtnCustomize     = document.getElementById('tab-btn-customize');
+  const tabBtnPreview       = document.getElementById('tab-btn-preview');
+  const studioSection       = document.getElementById('studio-section');
 
   // Phone Mockup Elements
   const mockupMascot        = document.getElementById('mockup-mascot');
@@ -296,7 +300,12 @@ document.addEventListener('DOMContentLoaded', function () {
     config.from = fromVal;
     config.question = qVal;
     config.mascot = mascotVal;
-    if (studioLetter) config.letter = studioLetter.value.trim() || letterTemplates.romantic;
+    if (studioLetter) {
+      config.letter = studioLetter.value.trim() || letterTemplates.romantic;
+      if (letterCharCount) {
+        letterCharCount.textContent = studioLetter.value.length + ' characters';
+      }
+    }
   }
 
   if (studioTo) studioTo.addEventListener('input', updatePhoneMockup);
@@ -344,6 +353,27 @@ document.addEventListener('DOMContentLoaded', function () {
           updatePhoneMockup();
         }
       });
+    });
+  }
+
+  // Mobile View Switcher
+  if (tabBtnCustomize && tabBtnPreview && studioSection) {
+    tabBtnCustomize.addEventListener('click', function () {
+      tabBtnCustomize.classList.add('active');
+      tabBtnPreview.classList.remove('active');
+      studioSection.classList.remove('show-preview');
+    });
+    tabBtnPreview.addEventListener('click', function () {
+      tabBtnPreview.classList.add('active');
+      tabBtnCustomize.classList.remove('active');
+      studioSection.classList.add('show-preview');
+    });
+  }
+
+  // Scroll to Creator Studio
+  if (btnNavCreate && studioSection) {
+    btnNavCreate.addEventListener('click', function () {
+      studioSection.scrollIntoView({ behavior: 'smooth' });
     });
   }
 
