@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  --font-main: 'Plus Jakarta Sans', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-editorial: 'Playfair Display', Georgia, serif;
   --font-handwriting: 'Dancing Script', cursive;
 
@@ -50,12 +50,28 @@ body {
   overflow-x: hidden;
   color: var(--text-primary);
   background: var(--bg-gradient);
-  background-size: 300% 300%;
-  animation: gradient-shift 20s ease infinite;
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
+}
+
+/* ── Snappy Mobile Touch Latency ── */
+button,
+a,
+input,
+select,
+textarea,
+.btn,
+.date-card,
+.nav-btn,
+.mobile-tab-btn,
+.envelope,
+.preset-chip,
+.mascot-chip {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ── Soft Glassmorphism Scrollbars ── */
@@ -111,9 +127,12 @@ body {
 .aura-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.6;
+  filter: blur(80px);
+  opacity: 0.55;
   mix-blend-mode: multiply;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   animation: aura-float 18s ease-in-out infinite alternate;
 }
 
@@ -2333,6 +2352,56 @@ p#subtitle-text {
 @media (max-width: 500px) {
   .tracker-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ⚡ MOBILE PERFORMANCE & GPU OPTIMIZATION ENGINE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 1. Stop heavy continuous aura-float animation & high-radius Gaussian blur on mobile */
+  .aura-orb {
+    animation: none !important;
+    filter: blur(35px) !important;
+    mix-blend-mode: normal !important;
+    opacity: 0.35 !important;
+    will-change: auto !important;
+  }
+
+  /* 2. Lighten backdrop-filter shader overhead on mobile cards for 60-120fps scrolling */
+  .glass-card,
+  .creator-card,
+  .bento-step-card,
+  .top-nav,
+  .modal-card,
+  .preview-phone-frame {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+  }
+
+  .bento-input {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+  }
+
+  /* 3. Floating canvas GPU isolation */
+  #hearts-canvas,
+  #confetti-canvas {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

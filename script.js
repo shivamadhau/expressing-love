@@ -915,7 +915,11 @@ document.addEventListener('DOMContentLoaded', function () {
   setupAudioUnlock();
 
   // ─── 12. FLOATING CANVAS HEARTS ───
+  // ─── 12. FLOATING HEARTS CANVAS (MOBILE OPTIMIZED) ───
   let hearts = [];
+  let heartsAnimationId = null;
+  let isPageVisible = !document.hidden;
+
   function resizeCanvas(c) {
     if (c) {
       c.width = window.innerWidth;
@@ -927,15 +931,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!heartsCanvas) return;
     resizeCanvas(heartsCanvas);
     hearts = [];
-    const count = Math.min(26, Math.floor(window.innerWidth / 45));
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? Math.min(8, Math.max(4, Math.floor(window.innerWidth / 60))) : Math.min(22, Math.floor(window.innerWidth / 50));
     for (let i = 0; i < count; i++) {
       hearts.push({
         x: Math.random() * heartsCanvas.width,
         y: Math.random() * heartsCanvas.height,
-        size: 8 + Math.random() * 16,
-        speedY: 0.4 + Math.random() * 0.8,
-        speedX: (Math.random() - 0.5) * 0.4,
-        opacity: 0.2 + Math.random() * 0.45,
+        size: isMobile ? 8 + Math.random() * 12 : 8 + Math.random() * 16,
+        speedY: 0.35 + Math.random() * 0.7,
+        speedX: (Math.random() - 0.5) * 0.35,
+        opacity: 0.2 + Math.random() * 0.4,
         rotation: Math.random() * Math.PI * 2,
         rotSpeed: (Math.random() - 0.5) * 0.02,
         color: ['#ff4d84', '#ff85a1', '#f472b6', '#fda4af'][Math.floor(Math.random() * 4)]
@@ -946,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function drawHeart(ctx, x, y, size, color, opacity, rot) {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(rot);
+    if (rot) ctx.rotate(rot);
     ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
     ctx.beginPath();
@@ -962,7 +967,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function animateHearts() {
-    if (!heartsCanvas || !heartsCtx) return;
+    if (!heartsCanvas || !heartsCtx || !isPageVisible) {
+      heartsAnimationId = null;
+      return;
+    }
     heartsCtx.clearRect(0, 0, heartsCanvas.width, heartsCanvas.height);
     for (const h of hearts) {
       h.y -= h.speedY;
@@ -974,8 +982,15 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       drawHeart(heartsCtx, h.x, h.y, h.size, h.color, h.opacity, h.rotation);
     }
-    requestAnimationFrame(animateHearts);
+    heartsAnimationId = requestAnimationFrame(animateHearts);
   }
+
+  document.addEventListener('visibilitychange', function () {
+    isPageVisible = !document.hidden;
+    if (isPageVisible && !heartsAnimationId) {
+      heartsAnimationId = requestAnimationFrame(animateHearts);
+    }
+  });
 
   createHearts();
   animateHearts();
@@ -1137,7 +1152,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ─── 14. CONFETTI & FIREWORKS ───
+  // ─── 14. CONFETTI & FIREWORKS (MOBILE OPTIMIZED) ───
   let confettiParticles = [];
   function launchConfetti() {
     if (!confettiCanvas || !confettiCtx) return;
@@ -1148,19 +1163,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     '#ff4081', '#f50057', '#ff1744', '#ff6e40', '#ff9100',
                     '#ffea00', '#76ff03', '#00e5ff', '#d500f9', '#651fff'];
 
-    for (let i = 0; i < 180; i++) {
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 65 : 160;
+
+    for (let i = 0; i < particleCount; i++) {
       confettiParticles.push({
-        x: window.innerWidth * 0.5 + (Math.random() - 0.5) * 200,
+        x: window.innerWidth * 0.5 + (Math.random() - 0.5) * (isMobile ? 140 : 200),
         y: window.innerHeight * 0.4,
-        vx: (Math.random() - 0.5) * 14,
-        vy: -8 - Math.random() * 12,
-        size: 4 + Math.random() * 10,
+        vx: (Math.random() - 0.5) * (isMobile ? 10 : 14),
+        vy: -7 - Math.random() * (isMobile ? 9 : 12),
+        size: 4 + Math.random() * (isMobile ? 7 : 10),
         color: colors[Math.floor(Math.random() * colors.length)],
         rotation: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.3,
+        rotSpeed: (Math.random() - 0.5) * 0.25,
         gravity: 0.18 + Math.random() * 0.12,
         friction: 0.985 + Math.random() * 0.01,
-        isHeart: Math.random() < 0.3,
+        isHeart: isMobile ? (Math.random() < 0.15) : (Math.random() < 0.3),
         opacity: 1
       });
     }
@@ -1190,12 +1208,11 @@ document.addEventListener('DOMContentLoaded', function () {
           confettiCtx.rotate(p.rotation);
           confettiCtx.fillStyle = p.color;
           confettiCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
-          confettiCtx.restore();
         }
         confettiCtx.restore();
       }
 
-      if (elapsed < 5000) {
+      if (elapsed < 4500) {
         requestAnimationFrame(animConfetti);
       } else {
         confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
