@@ -55,6 +55,8 @@ html {
 body {
   font-family: var(--font-main);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   color: var(--text-primary);
   background: var(--bg-gradient);
@@ -1079,27 +1081,40 @@ textarea,
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PLATFORM FOOTER
+   PLATFORM FOOTER & DASHBOARD LAYOUT
    ═══════════════════════════════════════════════════════════════ */
+.platform-dashboard {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .platform-footer {
+  margin-top: auto;
   text-align: center;
-  padding: 50px 20px 60px;
+  padding: 32px 20px max(16px, env(safe-area-inset-bottom, 16px));
   position: relative;
   z-index: 2;
 }
 
 .footer-credit-pill {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.76);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 10px 26px;
+  padding: 9px 24px;
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.9);
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  transition: transform 0.2s var(--ease-apple);
+}
+
+.footer-credit-pill:hover {
+  transform: translateY(-2px);
 }
 
 .credit-heart {
@@ -1109,15 +1124,18 @@ textarea,
 }
 
 .footer-sub {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
+  margin: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
    EXPERIENCE MODE (Stages 1-4, Glass Card, Envelope, Confetti)
    ═══════════════════════════════════════════════════════════════ */
 body.platform-mode {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
   overflow-y: auto !important;
 }
 
@@ -2351,7 +2369,12 @@ p#subtitle-text {
   /* Studio Customizer Form */
   .studio-section {
     padding: 0 12px;
-    margin-bottom: 45px;
+    margin-bottom: 20px;
+  }
+
+  .platform-footer {
+    padding: 24px 12px max(14px, env(safe-area-inset-bottom, 14px));
+    margin-top: auto;
   }
 
   .creator-card {
