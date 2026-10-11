@@ -278,13 +278,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // ─── 5. STAGE DISPLAY & STATE RESET ───
   function showStage(target) {
     allStages.forEach(function (s) {
-      if (s) s.style.display = 'none';
+      if (s && s !== target) s.style.display = 'none';
     });
     if (target) {
       target.style.display = 'flex';
       target.style.animation = 'none';
-      void target.offsetWidth;
-      target.style.animation = 'fadeInUp 0.7s cubic-bezier(0.22,0.61,0.36,1)';
+      requestAnimationFrame(function () {
+        target.style.animation = 'fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
     }
   }
 
@@ -1109,8 +1110,21 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.restore();
   }
 
+  let isCanvasInView = true;
+  if ('IntersectionObserver' in window && heartsCanvas) {
+    const canvasObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        isCanvasInView = entry.isIntersecting;
+        if (isCanvasInView && isPageVisible && !heartsAnimationId) {
+          heartsAnimationId = requestAnimationFrame(animateHearts);
+        }
+      });
+    }, { threshold: 0.05 });
+    canvasObserver.observe(heartsCanvas);
+  }
+
   function animateHearts() {
-    if (!heartsCanvas || !heartsCtx || !isPageVisible) {
+    if (!heartsCanvas || !heartsCtx || !isPageVisible || !isCanvasInView) {
       heartsAnimationId = null;
       return;
     }
@@ -1130,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('visibilitychange', function () {
     isPageVisible = !document.hidden;
-    if (isPageVisible && !heartsAnimationId) {
+    if (isPageVisible && isCanvasInView && !heartsAnimationId) {
       heartsAnimationId = requestAnimationFrame(animateHearts);
     }
   });
@@ -1191,8 +1205,7 @@ document.addEventListener('DOMContentLoaded', function () {
     lastDodgeX = newX;
     lastDodgeY = newY;
 
-    btnNo.style.left = newX + 'px';
-    btnNo.style.top  = newY + 'px';
+    btnNo.style.transform = 'translate3d(' + newX + 'px, ' + newY + 'px, 0) scale(' + noScale + ')';
   }
 
   function handleNoAction() {
@@ -1206,8 +1219,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 10th No: Vanish permanently!
     if (noCount >= 10) {
-      btnNo.style.transition = 'all 0.6s ease';
-      btnNo.style.transform = 'scale(0)';
+      btnNo.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease';
+      if (btnNo.classList.contains('dodging')) {
+        btnNo.style.transform = 'translate3d(' + (lastDodgeX >= 0 ? lastDodgeX : 0) + 'px, ' + (lastDodgeY >= 0 ? lastDodgeY : 0) + 'px, 0) scale(0)';
+      } else {
+        btnNo.style.transform = 'scale(0)';
+      }
       btnNo.style.opacity = '0';
       btnNo.style.pointerEvents = 'none';
       setTimeout(function () {
@@ -1220,8 +1237,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (pleaMessage) {
         pleaMessage.textContent = 'The No button gave up on you too 😂💀';
         pleaMessage.classList.remove('shake');
-        void pleaMessage.offsetWidth;
-        pleaMessage.classList.add('shake');
+        requestAnimationFrame(function () {
+          pleaMessage.classList.add('shake');
+        });
       }
       if (noCounter) {
         noCounter.textContent = 'You said no 10 times! The No button has left the chat 👋😂';
@@ -1252,7 +1270,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     noScale = Math.max(0.5, noScale - 0.08);
-    btnNo.style.transform = 'scale(' + noScale + ')';
+    if (btnNo.classList.contains('dodging')) {
+      btnNo.style.transform = 'translate3d(' + (lastDodgeX >= 0 ? lastDodgeX : 0) + 'px, ' + (lastDodgeY >= 0 ? lastDodgeY : 0) + 'px, 0) scale(' + noScale + ')';
+    } else {
+      btnNo.style.transform = 'scale(' + noScale + ')';
+    }
 
     // Start dodging only after at least 3 clicks on No
     if (noCount >= 3) {
@@ -1413,16 +1435,22 @@ document.addEventListener('DOMContentLoaded', function () {
             envelopeArea.classList.add('disappearing');
             setTimeout(function () {
               envelopeArea.style.display = 'none';
-              if (letterEl) letterEl.style.display = 'block';
+              if (letterEl) {
+                letterEl.style.display = 'block';
+                letterEl.style.animation = 'none';
+                requestAnimationFrame(function () {
+                  letterEl.style.animation = 'letterOpen 0.65s cubic-bezier(0.16, 1, 0.3, 1)';
+                });
+              }
               setTimeout(function () {
                 if (btnDate) {
                   btnDate.style.display = 'inline-block';
-                  btnDate.style.animation = 'fadeInUp 0.6s ease';
+                  btnDate.style.animation = 'fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
                 }
               }, 400);
             }, 450);
           }
-        }, 350);
+        }, 550);
       }
     });
   }
