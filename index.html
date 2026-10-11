@@ -72,10 +72,22 @@
             </div>
         </section>
 
-        <!-- Mobile View Switcher (Visible only on small screens) -->
-        <div class="mobile-view-tabs" id="mobile-view-tabs">
-            <button type="button" class="mobile-tab-btn active" id="tab-btn-customize">✏️ Customize Note</button>
-            <button type="button" class="mobile-tab-btn" id="tab-btn-preview">📱 Live Phone Preview</button>
+        <!-- Mobile Step Wizard Progress & Navigation Bar -->
+        <div class="mobile-wizard-container" id="mobile-wizard-container">
+            <div class="wizard-header-status">
+                <span class="wizard-step-tag" id="wizard-step-badge">Step 1 of 4</span>
+                <span class="wizard-step-title" id="wizard-step-label">The Couple 💕</span>
+            </div>
+            <div class="wizard-progress-track">
+                <div class="wizard-progress-bar" id="wizard-progress-bar" style="width: 25%;"></div>
+            </div>
+            <div class="wizard-pills" id="wizard-pills">
+                <button type="button" class="wizard-pill active" data-step-target="1">1. Couple</button>
+                <button type="button" class="wizard-pill" data-step-target="2">2. Question</button>
+                <button type="button" class="wizard-pill" data-step-target="3">3. Mascot</button>
+                <button type="button" class="wizard-pill" data-step-target="4">4. Letter</button>
+                <button type="button" class="wizard-pill pill-preview" data-step-target="preview">📱 Preview</button>
+            </div>
         </div>
 
         <!-- Studio Creator & Live Preview -->
@@ -92,7 +104,7 @@
                     </div>
 
                     <!-- Step 1: The Couple -->
-                    <div class="bento-step-card">
+                    <div class="bento-step-card active-step" data-step="1">
                         <div class="bento-step-header">
                             <span class="step-number">1</span>
                             <div class="step-info">
@@ -122,10 +134,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="wizard-step-actions">
+                            <button type="button" class="btn btn-love btn-step-next" data-next-step="2">
+                                <span>Next: Choose Question 💍</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Step 2: The Question -->
-                    <div class="bento-step-card">
+                    <div class="bento-step-card" data-step="2">
                         <div class="bento-step-header">
                             <span class="step-number">2</span>
                             <div class="step-info">
@@ -151,10 +169,19 @@
                             <span class="input-icon">❓</span>
                             <input type="text" id="studio-question" class="studio-input" placeholder="Type your custom question..." value="Do you love me? 🥺">
                         </div>
+                        <div class="wizard-step-actions">
+                            <button type="button" class="btn btn-secondary btn-step-prev" data-prev-step="1">
+                                <span>← Back</span>
+                            </button>
+                            <button type="button" class="btn btn-love btn-step-next" data-next-step="3">
+                                <span>Next: Mascot Mood 🐱</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Step 3: Mascot Selector -->
-                    <div class="bento-step-card">
+                    <div class="bento-step-card" data-step="3">
                         <div class="bento-step-header">
                             <span class="step-number">3</span>
                             <span class="step-info">
@@ -180,10 +207,19 @@
                                 <span class="mascot-label">Teddy Bear</span>
                             </button>
                         </div>
+                        <div class="wizard-step-actions">
+                            <button type="button" class="btn btn-secondary btn-step-prev" data-prev-step="2">
+                                <span>← Back</span>
+                            </button>
+                            <button type="button" class="btn btn-love btn-step-next" data-next-step="4">
+                                <span>Next: Love Letter 💌</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Step 4: Secret Love Letter -->
-                    <div class="bento-step-card">
+                    <div class="bento-step-card" data-step="4">
                         <div class="bento-step-header">
                             <span class="step-number">4</span>
                             <div class="step-info">
@@ -200,6 +236,15 @@
                         <div class="textarea-wrapper">
                             <textarea id="studio-letter" class="studio-textarea" rows="4" placeholder="Write your heartfelt message here...">From the moment you came into my life, everything changed for the better. Every smile of yours lights up my entire world, and every moment we share becomes my most treasured memory. I don't need the stars when I have the sparkle in your eyes. You are my today, my tomorrow, and my forever. 💕</textarea>
                             <div class="char-count" id="letter-char-count">294 characters</div>
+                        </div>
+                        <div class="wizard-step-actions">
+                            <button type="button" class="btn btn-secondary btn-step-prev" data-prev-step="3">
+                                <span>← Back</span>
+                            </button>
+                            <button type="button" class="btn btn-love btn-step-next btn-finish-steps" data-next-step="preview">
+                                <span>📱 See Live Preview</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
                         </div>
                     </div>
 
@@ -250,6 +295,23 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Preview Actions -->
+                    <div class="mobile-preview-actions" id="mobile-preview-actions">
+                        <button id="btn-mobile-generate" class="btn btn-love btn-large btn-preview-generate">
+                            <span class="btn-sparkle">✨</span>
+                            <span>Generate Magic Link</span>
+                            <span class="btn-arrow">→</span>
+                        </button>
+                        <div class="preview-actions-row">
+                            <button type="button" id="btn-mobile-edit" class="btn btn-secondary btn-preview-edit">
+                                <span>✏️ Edit Note</span>
+                            </button>
+                            <button type="button" id="btn-mobile-test" class="btn btn-secondary btn-preview-test">
+                                <span>👁️ Test Live Flow</span>
+                            </button>
                         </div>
                     </div>
                 </div>

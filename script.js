@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const tabBtnCustomize     = document.getElementById('tab-btn-customize');
   const tabBtnPreview       = document.getElementById('tab-btn-preview');
   const studioSection       = document.getElementById('studio-section');
+  const wizardContainer     = document.getElementById('mobile-wizard-container');
+  const wizardStepBadge     = document.getElementById('wizard-step-badge');
+  const wizardStepLabel     = document.getElementById('wizard-step-label');
+  const wizardProgressBar   = document.getElementById('wizard-progress-bar');
+  const wizardPills         = document.querySelectorAll('.wizard-pill');
+  const bentoStepCards      = document.querySelectorAll('.bento-step-card');
+  const btnMobileGenerate   = document.getElementById('btn-mobile-generate');
+  const btnMobileEdit       = document.getElementById('btn-mobile-edit');
+  const btnMobileTest       = document.getElementById('btn-mobile-test');
 
   // Phone Mockup Elements
   const mockupMascot        = document.getElementById('mockup-mascot');
@@ -462,17 +471,137 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Mobile View Switcher
-  if (tabBtnCustomize && tabBtnPreview && studioSection) {
-    tabBtnCustomize.addEventListener('click', function () {
-      tabBtnCustomize.classList.add('active');
-      tabBtnPreview.classList.remove('active');
-      studioSection.classList.remove('show-preview');
-    });
-    tabBtnPreview.addEventListener('click', function () {
-      tabBtnPreview.classList.add('active');
-      tabBtnCustomize.classList.remove('active');
+  // ─── 7. MOBILE STEP WIZARD CONTROLLER ───
+  const stepTitles = {
+    1: 'The Couple 💕',
+    2: 'The Proposal Question 💍',
+    3: 'Pick Mascot Mood 🐱',
+    4: 'Secret Love Letter 💌',
+    preview: 'Live Phone Preview 📱'
+  };
+
+  let currentMobileStep = 1;
+
+  function setMobileWizardStep(step) {
+    if (!studioSection) return;
+
+    if (step === 'preview') {
       studioSection.classList.add('show-preview');
+      if (wizardStepBadge) wizardStepBadge.textContent = 'Preview';
+      if (wizardStepLabel) wizardStepLabel.textContent = stepTitles.preview;
+      if (wizardProgressBar) wizardProgressBar.style.width = '100%';
+
+      if (wizardPills) {
+        wizardPills.forEach(function (pill) {
+          if (pill.getAttribute('data-step-target') === 'preview') {
+            pill.classList.add('active');
+          } else {
+            pill.classList.remove('active');
+          }
+        });
+      }
+
+      updatePhoneMockup();
+      studioSection.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    const stepNum = parseInt(step, 10);
+    if (isNaN(stepNum) || stepNum < 1 || stepNum > 4) return;
+    currentMobileStep = stepNum;
+
+    // Exit preview mode if active
+    studioSection.classList.remove('show-preview');
+
+    // Filter active bento card
+    if (bentoStepCards) {
+      bentoStepCards.forEach(function (card) {
+        const cardStep = parseInt(card.getAttribute('data-step'), 10);
+        if (cardStep === stepNum) {
+          card.classList.add('active-step');
+        } else {
+          card.classList.remove('active-step');
+        }
+      });
+    }
+
+    // Update status labels & progress bar
+    if (wizardStepBadge) wizardStepBadge.textContent = 'Step ' + stepNum + ' of 4';
+    if (wizardStepLabel) wizardStepLabel.textContent = stepTitles[stepNum] || '';
+    if (wizardProgressBar) {
+      const pct = (stepNum / 4) * 100;
+      wizardProgressBar.style.width = pct + '%';
+    }
+
+    // Update wizard pills
+    if (wizardPills) {
+      wizardPills.forEach(function (pill) {
+        const target = pill.getAttribute('data-step-target');
+        if (target === String(stepNum)) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+    }
+
+    updatePhoneMockup();
+    studioSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Setup Wizard Navigation Buttons (Next / Prev)
+  document.querySelectorAll('.btn-step-next').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const next = btn.getAttribute('data-next-step');
+      setMobileWizardStep(next);
+    });
+  });
+
+  document.querySelectorAll('.btn-step-prev').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const prev = btn.getAttribute('data-prev-step');
+      setMobileWizardStep(prev);
+    });
+  });
+
+  // Setup Wizard Pills (Quick Jump)
+  if (wizardPills) {
+    wizardPills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        const target = pill.getAttribute('data-step-target');
+        setMobileWizardStep(target);
+      });
+    });
+  }
+
+  // Legacy tab switcher support if present
+  if (tabBtnCustomize) {
+    tabBtnCustomize.addEventListener('click', function () {
+      setMobileWizardStep(currentMobileStep || 1);
+    });
+  }
+  if (tabBtnPreview) {
+    tabBtnPreview.addEventListener('click', function () {
+      setMobileWizardStep('preview');
+    });
+  }
+
+  // Mobile Preview Actions
+  if (btnMobileGenerate) {
+    btnMobileGenerate.addEventListener('click', function () {
+      if (btnGenerateMagic) btnGenerateMagic.click();
+    });
+  }
+
+  if (btnMobileEdit) {
+    btnMobileEdit.addEventListener('click', function () {
+      setMobileWizardStep(currentMobileStep || 4);
+    });
+  }
+
+  if (btnMobileTest) {
+    btnMobileTest.addEventListener('click', function () {
+      if (btnPreviewFullscreen) btnPreviewFullscreen.click();
     });
   }
 
