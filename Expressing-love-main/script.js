@@ -707,18 +707,32 @@ document.addEventListener('DOMContentLoaded', function () {
     btnCopyMagic.addEventListener('click', function () {
       if (shareLinkInput) {
         shareLinkInput.select();
+        const copySuccess = function () {
+          btnCopyMagic.innerHTML = '<span class="copy-text">Copied!</span> ✅';
+          btnCopyMagic.style.background = '#16a34a';
+          setTimeout(function () {
+            btnCopyMagic.innerHTML = '<span class="copy-text">Copy Link</span> 📋';
+            btnCopyMagic.style.background = '';
+          }, 2000);
+        };
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(shareLinkInput.value).then(function () {
-            btnCopyMagic.textContent = 'Copied! ✅';
-            setTimeout(function () { btnCopyMagic.textContent = 'Copy Link 📋'; }, 2000);
+          navigator.clipboard.writeText(shareLinkInput.value).then(copySuccess).catch(function () {
+            document.execCommand('copy');
+            copySuccess();
           });
         } else {
           document.execCommand('copy');
-          btnCopyMagic.textContent = 'Copied! ✅';
-          setTimeout(function () { btnCopyMagic.textContent = 'Copy Link 📋'; }, 2000);
+          copySuccess();
         }
         playPop();
       }
+    });
+  }
+
+  const btnCloseShareX = document.getElementById('btn-close-share-x');
+  if (btnCloseShareX) {
+    btnCloseShareX.addEventListener('click', function () {
+      if (shareModal) shareModal.style.display = 'none';
     });
   }
 

@@ -1669,11 +1669,11 @@ p#subtitle-text {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 14px;
 }
 
 .modal-overlay {
@@ -1682,15 +1682,16 @@ p#subtitle-text {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(20, 10, 16, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(20, 10, 16, 0.58);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .modal-content {
   position: relative;
   z-index: 2;
-  animation: modal-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-sizing: border-box;
+  animation: modal-pop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25);
 }
 
 @keyframes modal-pop {
@@ -1704,47 +1705,169 @@ p#subtitle-text {
   }
 }
 
+.modal-close-icon {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 107, 157, 0.22);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  touch-action: manipulation;
+}
+
+.modal-close-icon:hover {
+  background: rgba(255, 77, 132, 0.15);
+  color: var(--primary-pink);
+  transform: rotate(90deg);
+}
+
 .share-card {
-  max-width: 480px;
+  max-width: 440px;
+  width: 100%;
+  padding: 26px 20px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 16px 50px rgba(255, 77, 132, 0.18), 0 4px 16px rgba(0, 0, 0, 0.06);
+  max-height: 90vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.share-card::-webkit-scrollbar {
+  width: 5px;
+}
+.share-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 107, 157, 0.3);
+  border-radius: 10px;
+}
+
+.share-ready-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-pink);
+  background: rgba(255, 107, 157, 0.12);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
 }
 
 .share-title {
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  line-height: 1.25;
 }
 
 .share-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
-  margin-bottom: 22px;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
+.ttl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #ff4d84;
+  background: rgba(255, 77, 132, 0.08);
+  border: 1px solid rgba(255, 77, 132, 0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin: 0 auto 14px auto;
+}
+
+.ttl-dot {
+  opacity: 0.5;
+}
+
+/* ── Seamless Capsule Link Box ── */
 .link-box {
   display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid rgba(255, 107, 157, 0.32);
+  border-radius: 50px;
+  padding: 4px 5px 4px 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(255, 107, 157, 0.08);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.link-box:focus-within {
+  border-color: var(--primary-pink);
+  box-shadow: 0 4px 18px rgba(255, 77, 132, 0.22);
+}
+
+.link-box-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .share-input {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(255, 107, 157, 0.3);
-  background: white;
+  flex: 1 1 0% !important;
+  min-width: 0 !important; /* CRITICAL FIX: prevents flex overflow */
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
   font-family: var(--font-main);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
   color: var(--text-primary);
   outline: none;
+  padding: 8px 4px 8px 0 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .btn-copy {
+  flex-shrink: 0;
   white-space: nowrap;
-  padding: 12px 22px;
-  font-size: 0.9rem;
+  padding: 8px 16px !important;
+  font-size: 0.82rem !important;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(255, 77, 132, 0.28);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
+/* ── Primary & Secondary Share Actions ── */
 .btn-whatsapp {
   display: flex;
   align-items: center;
@@ -1755,50 +1878,96 @@ p#subtitle-text {
   text-decoration: none;
   font-weight: 700;
   font-size: 0.92rem;
-  padding: 13px 24px;
+  padding: 12px 20px;
   border-radius: 50px;
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
-  transition: all 0.25s ease;
-  margin-bottom: 22px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.32);
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .btn-whatsapp:hover {
   background: #20bd5a;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.42);
 }
 
+.share-actions-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.btn-share-action {
+  flex: 1;
+  justify-content: center;
+  padding: 10px 12px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 107, 157, 0.25);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.btn-share-action:hover {
+  background: white;
+  border-color: var(--primary-pink);
+  color: var(--primary-pink);
+}
+
+/* ── Romantic QR Code Section ── */
 .qr-section {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 245, 248, 0.7);
   border-radius: 20px;
-  padding: 18px;
-  margin-bottom: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  padding: 14px 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 107, 157, 0.18);
 }
 
 .qr-header {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-secondary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .qr-canvas-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 #qr-canvas {
   background: white;
-  padding: 10px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.15);
+  padding: 8px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
+  width: 140px;
+  height: 140px;
+  max-width: 100%;
 }
 
-.btn-small {
-  padding: 9px 20px !important;
+.btn-qr-download {
+  padding: 7px 16px !important;
+  font-size: 0.8rem !important;
+  border-radius: 50px;
+}
+
+.modal-actions-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.btn-close-modal {
+  padding: 8px 24px !important;
   font-size: 0.85rem !important;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 107, 157, 0.2);
 }
 
 .modal-actions {

@@ -445,43 +445,63 @@
     <div id="share-modal" class="modal" style="display:none;">
         <div class="modal-overlay" id="share-modal-overlay"></div>
         <div class="modal-content glass-card share-card">
-            <h2 class="share-title">🎉 Your Magic Link is Ready!</h2>
-            <p class="share-subtitle">Send this to your partner and watch their reaction 💕</p>
-            <div class="ttl-badge" style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:600; color:#ff4d84; background:rgba(255,77,132,0.1); border:1px solid rgba(255,77,132,0.25); border-radius:20px; padding:4px 12px; margin: 0 auto 14px auto;">
-                <span>⏳ Active for 48 Hours</span> • <span>Auto-cleans storage</span>
+            <!-- Close Icon -->
+            <button type="button" id="btn-close-share-x" class="modal-close-icon" aria-label="Close modal">✕</button>
+
+            <!-- Header -->
+            <div class="share-modal-header">
+                <div class="share-ready-pill"><span>✨</span> Link Ready</div>
+                <h2 class="share-title">Your Magic Link is Ready!</h2>
+                <p class="share-subtitle">Send this to your partner and watch their reaction 💕</p>
+                <div class="ttl-badge">
+                    <span>⏳ Active for 48 Hours</span>
+                    <span class="ttl-dot">•</span>
+                    <span>Auto-cleans storage</span>
+                </div>
             </div>
 
-            <!-- Link Box -->
+            <!-- Integrated Capsule Link Box -->
             <div class="link-box">
-                <input type="text" readonly id="share-link-input" class="input-field share-input" aria-label="Your magic link">
-                <button id="btn-copy-magic" class="btn btn-love btn-copy">Copy Link 📋</button>
+                <span class="link-box-icon">🔗</span>
+                <input type="text" readonly id="share-link-input" class="share-input" aria-label="Your magic link">
+                <button type="button" id="btn-copy-magic" class="btn btn-love btn-copy">
+                    <span class="copy-text">Copy Link</span>
+                    <span class="copy-icon">📋</span>
+                </button>
             </div>
 
             <!-- WhatsApp Direct Share -->
             <a id="btn-share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-                <span class="wa-icon">💬</span> Share on WhatsApp
+                <span class="wa-icon">💬</span>
+                <span>Share on WhatsApp</span>
             </a>
 
-            <!-- Track Reaction Quick Link -->
-            <button id="btn-open-tracker-from-share" class="btn btn-tracker">
-                <span>📊 View Partner Response Tracker</span>
-            </button>
+            <!-- Secondary Actions Row -->
+            <div class="share-actions-row">
+                <button type="button" id="btn-open-tracker-from-share" class="btn btn-secondary btn-share-action">
+                    <span>📊 Live Tracker</span>
+                </button>
+                <button type="button" id="btn-test-link" class="btn btn-secondary btn-share-action">
+                    <span>🚀 Test Note</span>
+                </button>
+            </div>
 
-            <!-- QR Code Section -->
+            <!-- Compact QR Code Section -->
             <div class="qr-section">
                 <div class="qr-header">
-                    <span>💌 Or Download Romantic QR Card</span>
+                    <span>💌 Romantic QR Code Card</span>
                 </div>
                 <div class="qr-canvas-wrapper">
                     <canvas id="qr-canvas" width="200" height="200"></canvas>
                 </div>
-                <button id="btn-download-qr" class="btn btn-secondary btn-small">Download QR Card 📥</button>
+                <button type="button" id="btn-download-qr" class="btn btn-secondary btn-small btn-qr-download">
+                    <span>Download QR Card 📥</span>
+                </button>
             </div>
 
-            <!-- Action buttons -->
-            <div class="modal-actions">
-                <button id="btn-test-link" class="btn btn-love btn-small">Open & Test Link 🚀</button>
-                <button id="btn-close-share" class="btn btn-secondary btn-small">Close</button>
+            <!-- Modal Bottom Footer -->
+            <div class="modal-actions-footer">
+                <button type="button" id="btn-close-share" class="btn btn-secondary btn-close-modal">Done</button>
             </div>
         </div>
     </div>
