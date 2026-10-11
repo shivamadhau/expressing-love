@@ -473,6 +473,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ─── 7. MOBILE STEP WIZARD CONTROLLER ───
+  function scrollToStudioTop() {
+    if (!studioSection) return;
+    const navEl = document.getElementById('top-nav');
+    const navH = (navEl && navEl.offsetHeight) ? navEl.offsetHeight : 54;
+    const rect = studioSection.getBoundingClientRect();
+    const targetY = window.pageYOffset + rect.top - navH - 8;
+    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+  }
+
   const stepTitles = {
     1: 'The Couple 💕',
     2: 'The Proposal Question 💍',
@@ -503,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       updatePhoneMockup();
-      studioSection.scrollIntoView({ behavior: 'smooth' });
+      scrollToStudioTop();
       return;
     }
 
@@ -547,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updatePhoneMockup();
-    studioSection.scrollIntoView({ behavior: 'smooth' });
+    scrollToStudioTop();
   }
 
   // Setup Wizard Navigation Buttons (Next / Prev)
@@ -609,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Scroll to Creator Studio
   if (btnNavCreate && studioSection) {
     btnNavCreate.addEventListener('click', function () {
-      studioSection.scrollIntoView({ behavior: 'smooth' });
+      scrollToStudioTop();
     });
   }
 
